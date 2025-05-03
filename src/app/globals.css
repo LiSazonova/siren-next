@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@config "../../tailwind.config.js";
+@tailwind utilities;
+
+:root {
+  /* background */
+  --bg-color: #fff;
+
+  background-color: var(--bg-color);
+  scroll-behavior: smooth;
+
+  /* error */
+  --error-color: #f11c0e;
+  /* success */
+  --success-color: #2b9429;
+}
+
+body {
+  box-sizing: border-box;
+}
