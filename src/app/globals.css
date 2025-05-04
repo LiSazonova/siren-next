@@ -4,7 +4,7 @@
 
 :root {
   /* background */
-  --bg-color: #fff;
+  --bg-color: #ffffff;
 
   background-color: var(--bg-color);
   scroll-behavior: smooth;
