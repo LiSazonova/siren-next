@@ -9,7 +9,6 @@ type Props = {
 export default function IndexPage({ params }: Props) {
   const { locale } = use(params);
 
-  // Enable static rendering
   setRequestLocale(locale);
 
   const t = useTranslations('HomePage');
