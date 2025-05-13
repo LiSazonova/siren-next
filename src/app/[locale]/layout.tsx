@@ -5,7 +5,6 @@ import { setRequestLocale } from 'next-intl/server';
 import { ReactNode } from 'react';
 import { Metadata } from 'next';
 import { routing } from '@/i18n/routing';
-import LocaleSwitcher from '@/components/LocalSwitcher';
 
 import '@/app/globals.css';
 
@@ -63,7 +62,6 @@ export default async function LocaleLayout({ children, params }: Props) {
         className={`${inter.variable} ${lora.variable} ${lobster.variable} ${kaushan.variable}`}
       >
         <NextIntlClientProvider>
-          <LocaleSwitcher />
           {/* <Navigation /> тут должен быть Header */}
           {children}
         </NextIntlClientProvider>
