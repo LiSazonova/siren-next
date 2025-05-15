@@ -11,7 +11,9 @@ import '@/app/globals.css';
 
 type Props = {
   children: ReactNode;
-  params: { locale: Locale };
+  params: {
+    locale: string;
+  };
 };
 
 export const metadata: Metadata = {
