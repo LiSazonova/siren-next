@@ -1,4 +1,3 @@
-import Header from '@/components/Header';
 import { Locale, useTranslations } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import { use } from 'react';
@@ -16,8 +15,10 @@ export default function Home({ params }: Props) {
 
   return (
     <div>
-      <Header />
-      <h1>{t('title')}</h1>
+      {/* <h1 className="text-amber-700">{t('title')}</h1> */}
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-2xl">Its HomePage</p>
+      </div>
     </div>
   );
 }

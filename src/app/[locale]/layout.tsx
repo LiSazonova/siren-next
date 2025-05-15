@@ -5,12 +5,13 @@ import { setRequestLocale } from 'next-intl/server';
 import { ReactNode } from 'react';
 import { Metadata } from 'next';
 import { routing } from '@/i18n/routing';
+import Header from '@/components/Header';
 
 import '@/app/globals.css';
 
 type Props = {
   children: ReactNode;
-  params: Promise<{ locale: Locale }>;
+  params: { locale: Locale };
 };
 
 export const metadata: Metadata = {
@@ -57,12 +58,12 @@ export default async function LocaleLayout({ children, params }: Props) {
   setRequestLocale(locale);
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={inter.className}>
       <body
         className={`${inter.variable} ${lora.variable} ${lobster.variable} ${kaushan.variable}`}
       >
-        <NextIntlClientProvider>
-          {/* <Navigation /> тут должен быть Header */}
+        <NextIntlClientProvider locale={locale}>
+          <Header />
           {children}
         </NextIntlClientProvider>
       </body>

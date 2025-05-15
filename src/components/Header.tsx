@@ -1,15 +1,17 @@
 'use client';
-import React from 'react';
-import DesktopHeader from '@/components/DesktopHeader';
-import MobileHeader from '@/components/MobileHeader';
 
-const Header = () => {
+import React, { useState, useEffect, useRef } from 'react';
+import DesktopHeader from './DesktopHeader';
+import MobileHeader from './MobileHeader';
+
+const Header: React.FC = () => {
   return (
-    <header className="shadow-md border-b border-gray-200">
-      <div className="">
+    <header className="">
+      {/* Десктопная версия: отображается на экранах ≥ 1024px */}
+      {/* <div className="hidden lg:block bg-red-100">
         <DesktopHeader />
-      </div>
-      <div className="hidden">
+      </div> */}
+      <div className="block lg:hidden">
         <MobileHeader />
       </div>
     </header>

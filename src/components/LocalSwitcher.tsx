@@ -16,12 +16,12 @@ export default function LocaleSwitcher() {
   };
 
   return (
-    <div className="flex items-center gap-1 text-sm">
+    <div className="flex items-center justify-end text-[18px] mr-6 py-8">
       {routing.locales.map((cur, idx) => (
         <span key={cur} className="flex items-center">
           <button
             onClick={() => changeLocale(cur)}
-            className={`bg-transparent border-none p-0 m-0 focus:outline-none ${
+            className={`bg-transparent border-none p-0 m-0  ${
               cur === locale
                 ? 'font-bold text-black'
                 : 'font-normal text-gray-600'
@@ -30,7 +30,7 @@ export default function LocaleSwitcher() {
             {cur.toUpperCase()}
           </button>
           {idx < routing.locales.length - 1 && (
-            <span className="mx-1 text-gray-400">|</span>
+            <span className="text-gray-400">|</span>
           )}
         </span>
       ))}
