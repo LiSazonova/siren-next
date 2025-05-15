@@ -10,10 +10,8 @@ import Header from '@/components/Header';
 import '@/app/globals.css';
 
 type Props = {
-  children: ReactNode;
-  params: {
-    locale: string;
-  };
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 };
 
 export const metadata: Metadata = {
@@ -52,7 +50,7 @@ export function generateStaticParams() {
 }
 
 export default async function LocaleLayout({ children, params }: Props) {
-  const { locale } = params;
+  const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
