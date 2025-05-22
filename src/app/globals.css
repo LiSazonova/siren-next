@@ -1,16 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  /* background */
-  --bg-color: #ffffff;
+  --color-bg: #ffffff;
+  --color-error: #f11c0e;
+  --color-success: #2b9429;
+  --color-gray: #747474;
+  --color-black: #000000;
+  --color-red: #ff0000;
 
-  background-color: var(--bg-color);
   scroll-behavior: smooth;
-
-  /* error */
-  --error-color: #f11c0e;
-  /* success */
-  --success-color: #2b9429;
 }
 
 * {

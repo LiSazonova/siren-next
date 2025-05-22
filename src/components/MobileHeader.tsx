@@ -5,7 +5,9 @@ import Logo from './Logo';
 import Icon from '@/components/Icon';
 import NavigationLinks from './NavigationLinks';
 import LocaleSwitcher from './LocalSwitcher';
-import Link from 'next/link';
+import AuthLinks from './AuthLinks';
+import DesktopIcons from './DesktopIcons';
+import MobileIcons from './MobileIcons';
 
 const MobileHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,11 +39,12 @@ const MobileHeader: React.FC = () => {
   return (
     <div className="flex items-center justify-between px-5 py-6 relative z-40">
       <Logo />
+      <MobileIcons />
       <button
         ref={buttonRef}
         onClick={toggleMenu}
         aria-label={isOpen ? 'Close Menu' : 'Open Menu'}
-        className="z-50"
+        className="z-50 ml-8"
       >
         <Icon
           name={isOpen ? 'close' : 'menu'}
@@ -58,17 +61,8 @@ const MobileHeader: React.FC = () => {
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <NavigationLinks onClick={() => setIsOpen(false)} />
-
-        <div className="flex flex-row items-center justify-end gap-8 py-8 px-6 text-[18px] border-b border-[#747474] uppercase">
-          <Link href="/signin" onClick={() => setIsOpen(false)}>
-            Вхід
-          </Link>
-          <Link href="/signup" onClick={() => setIsOpen(false)}>
-            Реєстрація
-          </Link>
-        </div>
-
+        <NavigationLinks onClick={() => setIsOpen(false)} variant="mobile" />
+        <AuthLinks onClick={() => setIsOpen(false)} />
         <LocaleSwitcher />
       </div>
     </div>

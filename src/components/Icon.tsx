@@ -6,11 +6,19 @@ interface IconProps {
   width: number;
   height: number;
   alt?: string;
+  style?: string;
   className?: string;
   onClick?: () => void;
 }
 
-const Icon: React.FC<IconProps> = ({ name, width, height, alt, onClick }) => (
+const Icon: React.FC<IconProps> = ({
+  name,
+  width,
+  height,
+  alt,
+  style,
+  onClick,
+}) => (
   <div
     className=""
     onClick={onClick}
@@ -23,6 +31,7 @@ const Icon: React.FC<IconProps> = ({ name, width, height, alt, onClick }) => (
       alt={alt || name}
       width={width}
       height={height}
+      style={{ cursor: onClick ? 'pointer' : 'default' }}
     />
   </div>
 );

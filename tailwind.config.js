@@ -35,6 +35,14 @@ module.exports = {
             animation: {
                 sizeUp: 'sizeUp 0.8s ease-out',
             },
+            colors: {
+                bg: 'var(--color-bg)',
+                error: 'var(--color-error)',
+                success: 'var(--color-success)',
+                gray: 'var(--color-gray)',
+                black: 'var(--color-black)',
+                red: 'var(--color-red)',
+            },
         },
     },
 };

@@ -7,12 +7,11 @@ import MobileHeader from './MobileHeader';
 const Header: React.FC = () => {
   return (
     <header className="">
-      {/* Десктопная версия: отображается на экранах ≥ 1024px */}
-      {/* <div className="hidden lg:block bg-red-100">
-        <DesktopHeader />
-      </div> */}
       <div className="block lg:hidden">
         <MobileHeader />
+      </div>
+      <div className="hidden lg:block">
+        <DesktopHeader />
       </div>
     </header>
   );

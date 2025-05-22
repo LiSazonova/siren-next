@@ -6,18 +6,21 @@
   "HomePage": {
     "title": "Welcome to Siren Store!"
   },
-  "LocaleLayout": {
-    "title": "next-intl example"
+  "AuthLinks": {
+    "signin": "Sign in",
+    "signup": "Sign up"
   },
-  "LocaleSwitcher": {
-    "locale": "{locale, select, uk {🇺🇦 Ukrainian} en {🇺🇸 English} other {Unknown}}"
+  "Search": {
+    "placeholder": "Search",
+    "noResults": "Nothing found"
   },
   "Manifest": {
     "name": "next-intl example"
   },
-  "Navigation": {
+    "Navigation": {
     "home": "Home",
-    "pathnames": "Pathnames"
+    "about": "About",
+    "collections": "Collections"
   },
   "NotFoundPage": {
     "description": "Please double-check the browser address bar or use the navigation to go to a known page.",

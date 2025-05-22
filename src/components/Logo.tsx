@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const Logo: React.FC = () => (
-  <Link href="/" className="">
+  <Link href="/" className="grow">
     <Image
       src="/Images/logo.svg"
       alt="Siren Store"
