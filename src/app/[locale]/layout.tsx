@@ -1,8 +1,7 @@
 import { Inter, Lora, Lobster, Kaushan_Script } from 'next/font/google';
 import { notFound } from 'next/navigation';
-import { Locale, hasLocale, NextIntlClientProvider } from 'next-intl';
+import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
-import { ReactNode } from 'react';
 import { Metadata } from 'next';
 import { routing } from '@/i18n/routing';
 import Header from '@/components/Header';
@@ -23,13 +22,11 @@ export const metadata: Metadata = {
 
 const inter = Inter({
   subsets: ['latin'],
-  weight: '400',
   variable: '--font-inter',
 });
 
 const lora = Lora({
   subsets: ['latin'],
-  weight: '400',
   variable: '--font-lora',
 });
 
@@ -58,7 +55,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   setRequestLocale(locale);
 
   return (
-    <html lang={locale} className={inter.className}>
+    <html lang={locale}>
       <body
         className={`${inter.variable} ${lora.variable} ${lobster.variable} ${kaushan.variable}`}
       >

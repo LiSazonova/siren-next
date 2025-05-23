@@ -14,8 +14,12 @@
     "placeholder": "Search",
     "noResults": "Nothing found"
   },
-  "Manifest": {
-    "name": "next-intl example"
+  "Hero": {
+    "new": "new",
+    "collection": "COLLECTION",
+    "subtitle": "Our latest clothing collection",
+    "offer": "Get attractive offers on your first purchase",
+    "button": "Shop Now"
   },
     "Navigation": {
     "home": "Home",
