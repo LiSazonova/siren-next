@@ -42,7 +42,7 @@ const Hero: React.FC = () => {
         <div className="flex justify-between mt-4 md:flex-row">
           <div className="text-left flex flex-col justify-start md:mt-[-120px] relative">
             <Image
-              src="/images/decorations/siren_1.svg"
+              src="/Images/decorations/siren_1.svg"
               alt="Siren"
               width={188}
               height={443}
@@ -58,7 +58,7 @@ const Hero: React.FC = () => {
               {t('offer')}
             </p>
             <Image
-              src="/images/decorations/siren_2.svg"
+              src="/Images/decorations/siren_2.svg"
               alt="Siren"
               width={184}
               height={253}
