@@ -16,7 +16,7 @@ export default function LocaleSwitcher() {
   };
 
   return (
-    <div className="flex items-center justify-end text-[18px] mr-6 py-8">
+    <div className="flex items-center justify-end text-[18px] mr-6 lg:mr-0 py-8">
       {routing.locales.map((cur, idx) => (
         <span key={cur} className="flex items-center">
           <button

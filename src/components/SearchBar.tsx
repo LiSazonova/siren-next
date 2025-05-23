@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import Icon from './Icon';
 
-const SearchBar = () => {
+const SearchBar = ({ onClose }: { onClose?: () => void }) => {
   const t = useTranslations('Search');
   const locale = useLocale();
   const router = useRouter();
@@ -13,6 +13,8 @@ const SearchBar = () => {
 
   const handleSearch = () => {
     router.push(`/${locale}/not-found`);
+    setQuery('');
+    if (onClose) onClose();
   };
 
   return (
