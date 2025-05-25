@@ -4,9 +4,9 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import { Metadata } from 'next';
 import { routing } from '@/i18n/routing';
-import Header from '@/components/Header';
 
 import '@/app/globals.css';
+import Header from '@/components/Header/Header';
 
 type Props = {
   children: React.ReactNode;

@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import Icon from './Icon';
 import { useLocale } from 'next-intl';
+import Icon from '../Icon';
 
 const DesktopIcons = () => {
   const locale = useLocale();

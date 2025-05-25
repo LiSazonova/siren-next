@@ -1,9 +1,8 @@
-import React from 'react';
-import Logo from './Logo';
-import LocaleSwitcher from './LocalSwitcher';
-import SearchBar from './SearchBar';
+import LocaleSwitcher from '../LocalSwitcher';
+import Logo from '../Logo';
+import NavigationLinks from '../NavigationLinks';
+import SearchBar from '../SearchBar';
 import DesktopIcons from './DesktopIcons';
-import NavigationLinks from './NavigationLinks';
 
 const DesktopHeader = () => {
   return (

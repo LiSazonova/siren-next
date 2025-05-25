@@ -320,11 +320,11 @@ export const CustomCarousel: React.FC = () => {
           let style = {};
           if (position === 'left') {
             style = {
-              transform: 'translateX(calc(-251px - 15px)) scale(0.9)',
+              transform: 'translateX(calc(-251px - 30px)) scale(1)',
             };
           } else if (position === 'right') {
             style = {
-              transform: 'translateX(calc(251px + 15px)) scale(0.9)',
+              transform: 'translateX(calc(251px + 30px)) scale(1)',
             };
           } else if (position === 'center') {
             style = {

@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import Icon from './Icon';
 import { useLocale } from 'next-intl';
-import SearchBar from './SearchBar';
 import clsx from 'clsx';
+import SearchBar from '../SearchBar';
+import Icon from '../Icon';
 
 const MobileIcons = ({
   isSearchOpen,
@@ -36,12 +36,6 @@ const MobileIcons = ({
           </button>
         </div>
       </div>
-      // <div className="flex items-center gap-2">
-      //   <SearchBar onClose={toggleSearch} />
-      //   <button onClick={toggleSearch} aria-label="Close Search">
-      //     <Icon name="close" alt="Close" width={24} height={24} />
-      //   </button>
-      // </div>
     );
   }
   return (

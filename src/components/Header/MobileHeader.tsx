@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import Logo from './Logo';
 import Icon from '@/components/Icon';
-import NavigationLinks from './NavigationLinks';
-import LocaleSwitcher from './LocalSwitcher';
-import AuthLinks from './AuthLinks';
 import MobileIcons from './MobileIcons';
+import Logo from '../Logo';
+import NavigationLinks from '../NavigationLinks';
+import AuthLinks from '../AuthLinks';
+import LocaleSwitcher from '../LocalSwitcher';
 
 const MobileHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

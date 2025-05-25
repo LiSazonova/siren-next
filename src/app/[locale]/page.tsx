@@ -1,4 +1,4 @@
-import Hero from '@/components/Hero';
+import Hero from '@/components/Hero/Hero';
 import { Locale, useTranslations } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import { use } from 'react';
