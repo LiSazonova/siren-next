@@ -12,10 +12,11 @@ export default function Home({ params }: Props) {
 
   setRequestLocale(locale);
 
-  const t = useTranslations('HomePage');
+  const t = useTranslations('Home');
 
   return (
     <div>
+      <h1 className="hidden">{t('title')}</h1>
       <Hero />
     </div>
   );
