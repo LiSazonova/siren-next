@@ -9,20 +9,20 @@ const HeroDesktop: React.FC = () => {
 
   return (
     <section className="text-center py-6 relative">
-      <div className="max-w-[320px] md:max-w-[768px] xl:max-w-[1228px] mx-auto">
-        <p className="font-lobster text-[38px]">{t('new')}</p>
-        <h1 className="font-lora text-[40px] uppercase text-black mt-[-20px] mb-[-20px]">
-          {t('collection')}
-        </h1>
-        <p className="font-kaushan text-[28px] text-black">La fleur</p>
+      <div className="max-w-[1228px] mx-auto">
+        <div className="flex flex-col items-center justify-center">
+          <p className="font-lobster text-[54px]">{t('new')}</p>
+          <h1 className="font-lora text-[64px] uppercase text-black mt-[-20px] mb-[-20px]">
+            {t('collection')}
+          </h1>
+          <p className="font-kaushan text-[34px] text-black">La fleur</p>
+        </div>
 
         <div className="flex justify-between">
-          <p className="lg:block md:hidden font-normal text-[18px] w-[155px] text-left">
+          <p className="block text-[18px] w-[155px] text-left">
             {t('subtitle')}
           </p>
-          <p className="lg:block md:hidden font-normal text-[18px] w-[210px] text-right">
-            {t('offer')}
-          </p>
+          <p className="block text-[18px] w-[210px] text-right">{t('offer')}</p>
         </div>
 
         <div className="flex justify-between items-center">
@@ -31,7 +31,7 @@ const HeroDesktop: React.FC = () => {
             alt="Siren"
             width={188}
             height={443}
-            className="w-[122px] h-[340px] md:w-[188px] md:h-[443px]"
+            className="w-[122px] h-[340px]"
           />
           <EmblaCarousel />
           <Image
@@ -39,13 +39,13 @@ const HeroDesktop: React.FC = () => {
             alt="Siren"
             width={184}
             height={253}
-            className="w-[150px] h-[203px] md:w-[184px] md:h-[253px]"
+            className="w-[150px] h-[203px]"
           />
         </div>
       </div>
 
       <Link href="/collections">
-        <button className="font-normal text-[24px] leading-[0.83333] uppercase px-[67px] py-[19px] bg-black text-white mt-[46px]">
+        <button className="w-[292px] text-[28px] leading-[0.83333] uppercase px-[40px] py-[19px] bg-black text-white mt-[46px] mr-[30px]">
           {t('button')}
         </button>
       </Link>
