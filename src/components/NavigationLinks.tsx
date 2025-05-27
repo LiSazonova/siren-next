@@ -16,15 +16,15 @@ const NavigationLinks: React.FC<Props> = ({ onClick, variant = 'desktop' }) => {
   const locale = useLocale();
 
   const mobileStyles =
-    'block px-6 py-8 w-full border-t border-[#747474] text-right';
+    'block px-6 py-8 w-full border-t border-[#747474] text-center';
   const desktopStyles = 'px-2 hover:underline';
 
   const linkStyle = variant === 'mobile' ? mobileStyles : desktopStyles;
 
   const links = [
     { href: `/${locale}`, label: t('home') },
-    { href: `/${locale}/about`, label: t('about') },
     { href: `/${locale}/collections`, label: t('collections') },
+    { href: `/${locale}/about`, label: t('about') },
   ];
 
   return (

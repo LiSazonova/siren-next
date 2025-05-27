@@ -9,7 +9,7 @@ const AuthLinks: React.FC<Props> = ({ onClick }) => {
   const locale = useLocale();
 
   return (
-    <div className="flex flex-row items-center justify-end gap-8 py-8 px-6 text-[18px] border-b border-gray uppercase">
+    <div className="flex flex-row items-center justify-center gap-8 py-8 px-6 text-[18px] border-b border-gray uppercase">
       <Link
         href={`/${locale}/signin`}
         onClick={onClick}

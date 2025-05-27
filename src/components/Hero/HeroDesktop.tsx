@@ -31,7 +31,7 @@ const HeroDesktop: React.FC = () => {
             alt="Siren"
             width={188}
             height={443}
-            className="w-[122px] h-[340px]"
+            className="w-[188px] h-[443px]"
           />
           <EmblaCarousel />
           <Image
@@ -39,13 +39,13 @@ const HeroDesktop: React.FC = () => {
             alt="Siren"
             width={184}
             height={253}
-            className="w-[150px] h-[203px]"
+            className="w-[184px] h-[253px]"
           />
         </div>
       </div>
 
       <Link href="/collections">
-        <button className="w-[292px] text-[28px] leading-[0.83333] uppercase px-[40px] py-[19px] bg-black text-white mt-[46px] mr-[30px]">
+        <button className="w-[292px] text-[28px] leading-[0.83333] uppercase px-[40px] py-[19px] bg-black text-white mt-[46px]">
           {t('button')}
         </button>
       </Link>
