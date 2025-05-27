@@ -24,7 +24,7 @@ export default function CollectionsPage() {
     <main>
       <section className="px-6 py-6">
         <div className="max-w-[320px] md:max-w-[768px] xl:max-w-[1228px] mx-auto">
-          <h1 className="text-[40px] uppercase font-lora text-center mb-[34px] md:mb-12">
+          <h1 className="text-[40px] md:text-[64px] uppercase font-lora text-center mb-[34px] md:mb-12">
             {t('title')}
           </h1>
           <div className="flex flex-col items-center gap-12 md:flex-row md:flex-wrap md:justify-center md:gap-5 xl:justify-start">
