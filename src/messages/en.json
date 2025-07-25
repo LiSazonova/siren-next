@@ -37,7 +37,10 @@
     "description3": "Founded with a mission to redefine modern femininity, The Siren is dedicated to creating fashion that resonates with women who drive both style and substance. The brand's commitment to quality and innovation is evident in every piece, making it the ultimate choice for those who value luxury, originality, and the power of self-expression."
   },
   "Collections": {
-    "title": "Collections"
+    "title": "Collections",
+    "defaultTitle": "Collections",
+    "errorLoading": "Error loading collections",
+    "loading": "Loading..."
   },
   "PathnamesPage": {
     "description": "<p>The pathnames are internationalized too.</p><p>If you're using the default language English, you'll see <code>/en/pathnames</code> in the browser address bar on this page.</p><p>If you change the locale to Ukrainian, the URL is localized accordingly (<code>/uk/pathnames</code>).</p>",
