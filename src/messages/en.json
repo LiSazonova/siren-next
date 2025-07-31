@@ -42,8 +42,17 @@
     "errorLoading": "Error loading collections",
     "loading": "Loading..."
   },
-  "PathnamesPage": {
-    "description": "<p>The pathnames are internationalized too.</p><p>If you're using the default language English, you'll see <code>/en/pathnames</code> in the browser address bar on this page.</p><p>If you change the locale to Ukrainian, the URL is localized accordingly (<code>/uk/pathnames</code>).</p>",
-    "title": "Pathnames"
+  "Products": {
+  "currency": "uah",
+  "sizesTitle": "Sizes",
+  "buyNow": "Buy now",
+  "addToCart": "Add to cart",
+  "errors": {
+    "selectSize": "Please select a size!"
+  },
+  "messages": {
+    "goToCheckout": "Go to checkout",
+    "addedToCart": "{name} added to cart"
   }
+}
 }

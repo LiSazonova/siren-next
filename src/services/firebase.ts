@@ -1,4 +1,12 @@
-import { collection, getDocs, query, orderBy, where } from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  where,
+  doc,
+  getDoc
+} from 'firebase/firestore';
 import { db } from '@/config/firebase';
 
 export interface Product {
@@ -48,4 +56,38 @@ export async function fetchProductsByCollection(slug: string): Promise<Product[]
       imageTitle: data.imageTitle || '',
     };
   });
+}
+
+export async function fetchProductSlugs(): Promise<string[]> {
+  const productsCol = collection(db, 'products');
+  const snapshot = await getDocs(
+    // если хочется упорядочить — можно по name или по порядковому полю
+    query(productsCol, orderBy('slug'))
+  );
+  return snapshot.docs.map((doc) => {
+    const data = doc.data() as any;
+    return data.slug as string;
+  });
+}
+
+export async function fetchProductBySlug(slug: string): Promise<Product | null> {
+  // Предполагаем, что document ID == slug
+  // Если у вас в Firestore _id отличен, то надо делать query
+  const docRef = doc(db, 'products', slug);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) {
+    return null;
+  }
+
+  const data = docSnap.data();
+  return {
+    slug: data.slug,
+    name: data.name,
+    description: data.description,
+    price: data.price,
+    sizes: data.sizes || [],
+    imageTitle: data.imageTitle || '',
+    images: data.images || [],
+  };
 }

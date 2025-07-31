@@ -43,6 +43,7 @@ import { routing } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
+import { ToastContainer } from 'react-toastify';
 
 type Props = {
   children: ReactNode;
@@ -56,7 +57,7 @@ export function generateStaticParams() {
 
 export default async function LocaleLayout({ children, params }: Props) {
   // Прямо здесь await, чтобы React знал, что это async-branch
-  const { locale } = params;
+  const { locale } = await params;
 
   // Пытаемся проверить локаль, если нет — 404
   if (!hasLocale(routing.locales, locale)) {
@@ -70,6 +71,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     <NextIntlClientProvider locale={locale}>
       <Header />
       {children}
+      <ToastContainer position="top-right" />
     </NextIntlClientProvider>
   );
 }
