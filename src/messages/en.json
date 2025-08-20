@@ -42,17 +42,17 @@
     "errorLoading": "Error loading collections",
     "loading": "Loading..."
   },
-  "Products": {
-  "currency": "uah",
-  "sizesTitle": "Sizes",
-  "buyNow": "Buy now",
-  "addToCart": "Add to cart",
-  "errors": {
-    "selectSize": "Please select a size!"
-  },
-  "messages": {
-    "goToCheckout": "Go to checkout",
-    "addedToCart": "{name} added to cart"
+  "products": {
+    "currency": "uah",
+    "sizesTitle": "Sizes",
+    "buyNow": "Buy now",
+    "addToCart": "Add to cart",
+    "errors": {
+      "selectSize": "Please select a size!"
+    },
+    "messages": {
+      "goToCheckout": "Go to checkout",
+      "addedToCart": "{name} added to cart"
+    }
   }
-}
 }

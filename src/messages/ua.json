@@ -42,17 +42,17 @@
     "errorLoading": "Помилка завантаження колекцій",
     "loading": "Завантаження..."
   },
-  "Products": {
-  "currency": "грн",
-  "sizesTitle": "Sizes",
-  "buyNow": "Купити зараз",
-  "addToCart": "В корзину",
-  "errors": {
-    "selectSize": "Будь ласка, виберіть розмір!"
-  },
-  "messages": {
-    "goToCheckout": "Перехід до оформлення…",
-    "addedToCart": "{name} додано до корзини"
+  "products": {
+    "currency": "грн",
+    "sizesTitle": "Розміри",
+    "buyNow": "Купити зараз",
+    "addToCart": "В корзину",
+    "errors": {
+      "selectSize": "Будь ласка, оберіть розмір!"
+    },
+    "messages": {
+      "goToCheckout": "Перехід до оформлення…",
+      "addedToCart": "{name} додано до корзини"
+    }
   }
-}
 }

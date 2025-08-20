@@ -28,9 +28,11 @@ export async function generateMetadata({
   const product = await fetchProductBySlug(slug);
   if (!product) return { title: 'Not Found' };
 
+  const desc = product.description[locale as 'en' | 'ua'] ?? '';
+
   return {
     title: `${product.name} | Siren`,
-    description: product.description.slice(0, 160),
+    description: desc.slice(0, 160),
   };
 }
 

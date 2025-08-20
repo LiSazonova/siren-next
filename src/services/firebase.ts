@@ -12,7 +12,7 @@ import { db } from '@/config/firebase';
 export interface Product {
   slug: string;
   name: string;
-  description: string;
+  description: { en?: string; ua?: string };
   price: number | string;
   sizes: string[];
   imageTitle: string;
