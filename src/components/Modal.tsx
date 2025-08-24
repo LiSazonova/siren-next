@@ -57,8 +57,7 @@ export default function Modal({
       {/* карточка */}
       <div
         className={[
-          'relative bg-white border border-black p-6 text-center',
-          'shadow-[0_0_0_1px_#000] animate-in fade-in zoom-in-95 duration-150',
+          'relative bg-white border-[1px] border-black p-10 text-center',
           sizeMap[size],
           className,
         ].join(' ')}
@@ -67,7 +66,7 @@ export default function Modal({
           <button
             onClick={onClose}
             aria-label="Закрыть"
-            className="absolute -right-3 -top-3 h-8 w-8 flex items-center justify-center bg-white border border-black"
+            className="absolute -right-3 -top-3 h-8 w-8 flex items-center justify-center bg-white border-[1px] border-black"
           >
             ✕
           </button>
