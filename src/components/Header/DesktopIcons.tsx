@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import Icon from '../Icon';
+import CartIconBadge from '../CartIconBadge';
 
 const DesktopIcons = () => {
   const locale = useLocale();
@@ -18,9 +19,7 @@ const DesktopIcons = () => {
           </Link>
         </li>
         <li className="">
-          <Link href={`/${locale}/cart`} className="">
-            <Icon name="basket" alt="Instagram" width={24} height={24} />
-          </Link>
+          <CartIconBadge />
         </li>
         <li className="">
           <Link href="/collections" className="">

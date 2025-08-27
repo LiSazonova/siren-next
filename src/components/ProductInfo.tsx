@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 import type { Product } from '@/services/firebase';
 import { useLocale, useTranslations } from 'next-intl';
 import Modal from './Modal';
+import useCart from '@/stores/cart';
+import { useRouter } from 'next/navigation';
 
 interface InfoProps {
   product: Product;
@@ -14,23 +16,53 @@ export default function ProductInfo({ product }: InfoProps) {
   const [openSizeModal, setOpenSizeModal] = useState(false);
   const locale = useLocale();
   const t = useTranslations('products');
+  const router = useRouter();
+
+  const addItem = useCart((s) => s.addItem);
 
   const desc = product.description[locale as 'en' | 'ua'] ?? '';
 
   const handleBuyNow = () => {
     if (!selectedSize) {
       setOpenSizeModal(true);
-      return false;
+      return;
     }
-    return true;
+    addItem({
+      productId: product.slug,
+      name: product.name,
+      price: product.price,
+      size: selectedSize,
+      qty: 1,
+      slug: product.slug,
+      image: product.imageTitle,
+    });
+    router.push(`/${locale}/cart`);
   };
+
   const handleAddToCart = () => {
     if (!selectedSize) {
       toast.error(t('errors.selectSize'));
       return;
     }
+    addItem({
+      productId: product.slug,
+      name: product.name,
+      price: product.price,
+      size: selectedSize,
+      qty: 1,
+      slug: product.slug,
+      image: product.imageTitle,
+    });
     toast.success(t('messages.addedToCart', { name: product.name }));
   };
+
+  // const handleAddToCart = () => {
+  //   if (!selectedSize) {
+  //     toast.error(t('errors.selectSize'));
+  //     return;
+  //   }
+  //   toast.success(t('messages.addedToCart', { name: product.name }));
+  // };
 
   return (
     <div className="md:flex md:flex-col md:justify-between">

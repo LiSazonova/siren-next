@@ -3,6 +3,7 @@ import { useLocale } from 'next-intl';
 import clsx from 'clsx';
 import SearchBar from '../SearchBar';
 import Icon from '../Icon';
+import CartIconBadge from '../CartIconBadge';
 
 const MobileIcons = ({
   isSearchOpen,
@@ -55,9 +56,7 @@ const MobileIcons = ({
         </Link>
       </li>
       <li className="">
-        <Link href={`/${locale}/cart`} className="">
-          <Icon name="basket" alt="Instagram" width={24} height={24} />
-        </Link>
+        <CartIconBadge />
       </li>
     </ul>
   );

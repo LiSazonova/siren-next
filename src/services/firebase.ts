@@ -13,7 +13,7 @@ export interface Product {
   slug: string;
   name: string;
   description: { en?: string; ua?: string };
-  price: number | string;
+  price: number;
   sizes: string[];
   imageTitle: string;
   images?: string[];
