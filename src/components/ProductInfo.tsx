@@ -56,14 +56,6 @@ export default function ProductInfo({ product }: InfoProps) {
     toast.success(t('messages.addedToCart', { name: product.name }));
   };
 
-  // const handleAddToCart = () => {
-  //   if (!selectedSize) {
-  //     toast.error(t('errors.selectSize'));
-  //     return;
-  //   }
-  //   toast.success(t('messages.addedToCart', { name: product.name }));
-  // };
-
   return (
     <div className="md:flex md:flex-col md:justify-between">
       <div>
