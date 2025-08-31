@@ -8,7 +8,7 @@ export default function CartIconBadge() {
   const locale = useLocale();
   const count = useCartCount();
   return (
-    <Link href={`/${locale}/cart`} aria-label="Кошик">
+    <Link href={`/${locale}/cart`} aria-label="Кошик" className="relative">
       <Icon name="basket" alt="Basket" width={24} height={24} />
 
       {count > 0 && (
