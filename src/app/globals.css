@@ -22,3 +22,7 @@ ul {
   padding-left: 0;
   margin: 0;
 }
+
+button {
+  cursor: pointer;
+}

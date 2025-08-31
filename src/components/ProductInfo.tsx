@@ -41,7 +41,7 @@ export default function ProductInfo({ product }: InfoProps) {
 
   const handleAddToCart = () => {
     if (!selectedSize) {
-      toast.error(t('errors.selectSize'));
+      setOpenSizeModal(true);
       return;
     }
     addItem({
@@ -53,7 +53,6 @@ export default function ProductInfo({ product }: InfoProps) {
       slug: product.slug,
       image: product.imageTitle,
     });
-    toast.success(t('messages.addedToCart', { name: product.name }));
   };
 
   return (
@@ -115,73 +114,3 @@ export default function ProductInfo({ product }: InfoProps) {
     </div>
   );
 }
-
-// src/components/ProductInfo.tsx
-// 'use client';
-// import React, { useState } from 'react';
-// import { toast } from 'react-toastify';
-// import { useTranslations } from 'next-intl';
-// import type { Product } from '@/services/firebase';
-
-// interface InfoProps {
-//   product: Product;
-// }
-
-// export default function ProductInfo({ product }: InfoProps) {
-//   const [selectedSize, setSelectedSize] = useState<string>('');
-//   const t = useTranslations('Products');
-
-//   const handleBuyNow = () => {
-//     if (!selectedSize) {
-//       toast.error(t('errors.selectSize'));
-//       return;
-//     }
-//     toast.success(t('messages.goToCheckout'));
-//   };
-//   const handleAddToCart = () => {
-//     if (!selectedSize) {
-//       toast.error(t('errors.selectSize'));
-//       return;
-//     }
-//     toast.success(t('messages.addedToCart', { name: product.name }));
-//   };
-
-//   return (
-//     <div>
-//       <p className="text-[28px] uppercase mb-6">{product.price} грн</p>
-//       <p className="hidden md:block text-[18px] text-gray-700 md:mb-12">
-//         {product.description}
-//       </p>
-//       <h2 className="text-[20px] uppercase mb-4">{t('sizesTitle')}</h2>
-//       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-//         {product.sizes.map((sz) => (
-//           <button
-//             key={sz}
-//             onClick={() => setSelectedSize(sz)}
-//             className={`border h-[58px] text-[18px] ${
-//               selectedSize === sz
-//                 ? 'bg-black text-white'
-//                 : 'bg-white text-black'
-//             }`}
-//           >
-//             {sz}
-//           </button>
-//         ))}
-//       </div>
-//       <div className="flex flex-col sm:flex-row gap-4">
-//         <button
-//           onClick={handleBuyNow}
-//           className="flex-1 bg-black text-white py-3 uppercase"
-//         >
-//           {t('buyNow')}
-//         </button>
-//         <button
-//           onClick={handleAddToCart}
-//           className="flex-1 border border-black py-3 uppercase"
-//         >
-//           {t('addToCart')}
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }

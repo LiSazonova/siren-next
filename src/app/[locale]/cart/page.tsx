@@ -135,12 +135,13 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <main className="max-w-5xl mx-auto px-4 py-16 text-center">
-        <h1 className="text-2xl font-semibold mb-6">Нічого не знайдено</h1>
-        <Link
-          href={`/${locale}/collections`}
-          className="px-6 py-3 bg-black text-white rounded"
-        >
-          До колекцій
+        <h1 className="font-lora text-[64px] text-center uppercase mb-[34px]">
+          Не знайдено
+        </h1>
+        <Link href={`/${locale}/collections`}>
+          <button className="w-[200px] border border-black py-3 text-[18px] uppercase p-2">
+            До колекцій →
+          </button>
         </Link>
       </main>
     );
