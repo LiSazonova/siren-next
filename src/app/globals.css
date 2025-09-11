@@ -17,6 +17,10 @@
   box-sizing: border-box;
 }
 
+body {
+  font-family: 'Inter', sans-serif;
+}
+
 ul {
   list-style: none;
   padding-left: 0;

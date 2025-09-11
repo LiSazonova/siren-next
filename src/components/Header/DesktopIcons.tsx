@@ -18,7 +18,7 @@ const DesktopIcons = () => {
             <Icon name="inst" alt="Instagram" width={24} height={24} />
           </Link>
         </li>
-        <li className="">
+        <li className="relative">
           <CartIconBadge />
         </li>
         <li className="">
