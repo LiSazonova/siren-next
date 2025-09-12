@@ -54,5 +54,14 @@
       "goToCheckout": "Go to checkout",
       "addedToCart": "{name} added to cart"
     }
+  },
+  "cart": {
+  "emptyTitle": "Not found",
+  "toCollections": "To collections →",
+  "headers": { "name": "Name", "size": "Size", "qty": "Quantity", "price": "Price" },
+  "remove": "Remove item",
+  "total": "Order total",
+  "checkout": "Proceed to checkout",
+  "currency": "UAH"
   }
 }
