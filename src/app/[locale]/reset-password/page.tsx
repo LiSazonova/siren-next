@@ -14,6 +14,8 @@ type ViewState =
   | 'form' // форма ввода нового пароля
   | 'success'; // успех
 
+export const dynamic = 'force-dynamic';
+
 export default function ResetPasswordPage() {
   const params = useSearchParams();
   const locale = useLocale();
