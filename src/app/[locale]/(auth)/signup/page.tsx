@@ -207,12 +207,13 @@
 import { Suspense } from 'react';
 import RegisterClient from './registerClient';
 
-export default function Page({
+export default async function Page({
   searchParams,
 }: {
   searchParams: { returnUrl?: string };
 }) {
-  const returnUrl = searchParams?.returnUrl ?? '';
+  const sp = await searchParams;
+  const returnUrl = sp?.returnUrl ?? '';
   return (
     <Suspense fallback={null}>
       <RegisterClient returnUrl={returnUrl} />

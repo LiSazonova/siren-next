@@ -187,12 +187,13 @@
 import { Suspense } from 'react';
 import LoginClient from './loginClient';
 
-export default function Page({
+export default async function Page({
   searchParams,
 }: {
-  searchParams: { returnUrl?: string };
+  searchParams?: { returnUrl?: string };
 }) {
-  const returnUrl = searchParams?.returnUrl ?? '';
+  const sp = await searchParams;
+  const returnUrl = sp?.returnUrl ?? '';
   return (
     <Suspense fallback={null}>
       <LoginClient returnUrl={returnUrl} />
