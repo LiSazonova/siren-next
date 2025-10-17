@@ -2,10 +2,11 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import EmblaCarousel from '@/components/EmblaCarousel';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 const HeroDesktop: React.FC = () => {
   const t = useTranslations('Hero');
+  const locale = useLocale();
 
   return (
     <section className="text-center py-6 relative">
@@ -44,7 +45,7 @@ const HeroDesktop: React.FC = () => {
         </div>
       </div>
 
-      <Link href="/collections">
+      <Link href={`${locale}/collections`}>
         <button className="w-[292px] text-[28px] leading-[0.83333] uppercase px-[40px] py-[19px] bg-black text-white mt-[46px]">
           {t('button')}
         </button>

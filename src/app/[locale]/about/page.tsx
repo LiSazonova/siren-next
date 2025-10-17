@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 const About: React.FC = () => {
-  const t = useTranslations('About');
+  const t = useTranslations('about');
 
   return (
     <main className="px-5 py-6">

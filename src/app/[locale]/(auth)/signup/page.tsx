@@ -1,55 +1,98 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-// import { useAuth } from '@/context/AuthContext';
-// import Modal from '@/components/Modal/Modal';
 import Image from 'next/image';
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  updateProfile,
+} from 'firebase/auth';
+import { auth, googleProvider } from '@/lib/firebaseClient';
+import { useLocale, useTranslations } from 'next-intl';
 
-const RegisterPage = () => {
-  // const { register } = useAuth();
+export default function RegisterPage() {
   const router = useRouter();
+  const params = useSearchParams();
+  const locale = useLocale();
 
-  const [form, setForm] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
+  const t = useTranslations('registerPage');
 
+  const [form, setForm] = useState({ username: '', email: '', password: '' });
   const [error, setError] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  // Не возвращаем на /signin|/signup (чтобы не прыгало назад)
+  const getSafeReturn = () => {
+    const raw = params.get('returnUrl') || '';
+    const isAuth = /\/(en|ua)\/(signin|signup)(\/|$)/.test(raw);
+    // Для реєстрації логичнее дефолт на checkout
+    return isAuth ? `/${locale}/checkout` : raw || `/${locale}/checkout`;
+  };
+
+  const finishLogin = async () => {
+    const idToken = await auth.currentUser?.getIdToken(true);
+    if (!idToken) throw new Error('no-id-token');
+    const res = await fetch('/api/sessionLogin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken }),
+    });
+    if (!res.ok) throw new Error('session-fail');
+    router.push(getSafeReturn());
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setError(null);
+    setLoading(true);
     try {
-      // const result = await register(form.username, form.email, form.password);
-      // if (result?.success) {
-      //   router.push('/');
-      // } else {
-      //   const msg = result?.message || 'Помилка реєстрації. Спробуйте пізніше.';
-      //   setError(msg);
-      //   // Если бэкенд вернул инфо о занятости почты — покажем модалку
-      //   if (
-      //     /already|exists|зарегистр/i.test(result?.message || '') ||
-      //     result?.code === 'EMAIL_EXISTS'
-      //   ) {
-      //     setIsModalOpen(true);
-      //   }
-      // }
-    } catch (err) {
-      setError('Помилка реєстрації. Спробуйте пізніше.');
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        form.email,
+        form.password
+      );
+
+      // Сохраняем ім’я в профиле — понадобится для приветствия
+      if (user && form.username.trim()) {
+        await updateProfile(user, { displayName: form.username.trim() });
+      }
+
+      await finishLogin();
+    } catch (err: any) {
+      if (err?.code === 'auth/weak-password')
+        setError('Занадто простий пароль (мінімум 6 символів).');
+      else if (err?.code === 'auth/email-already-in-use')
+        setError('Цей email вже використовується.');
+      else if (err?.code === 'session-fail')
+        setError('Не вдається створити сесію. Спробуйте ще раз.');
+      else setError('Помилка реєстрації. Спробуйте пізніше.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogle = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      await signInWithPopup(auth, googleProvider);
+      await finishLogin();
+    } catch {
+      setError('Не вдалося увійти через Google');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <section className="w-screen min-h-screen bg-black text-white px-5 py-6">
       <div className="flex flex-col-reverse items-center lg:flex-row lg:justify-center lg:gap-[138px]">
-        {/* Декорация */}
+        {/* Декорація */}
         <div className="w-[175px] h-[290px] md:w-[350px] md:h-[583px]">
           <Image
             src="/images/decorations/registr_siren.svg"
@@ -63,11 +106,8 @@ const RegisterPage = () => {
 
         {/* Форма */}
         <div className="flex flex-col items-center">
-          <h1
-            className="font-[var(--font-lora)] text-[40px] leading-[51.2px] text-center uppercase
-                       text-[var(--white-color)] mb-6 md:text-[64px] md:leading-[81.92px]"
-          >
-            РЕЄСТРАЦІЯ
+          <h1 className="font-[var(--font-lora)] text-[40px] md:text-[64px] leading-[51.2px] md:leading-[81.92px] text-center uppercase text-[var(--white-color)] mb-6">
+            {t('title')}
           </h1>
 
           {error && (
@@ -85,10 +125,9 @@ const RegisterPage = () => {
           >
             <label
               htmlFor="username"
-              className="w-full max-w-[320px] md:max-w-[728px] font-[var(--font-inter)]
-                         text-[18px] leading-[21.78px] text-left text-[var(--white-color)] mb-3"
+              className="w-full max-w-[728px] font-[var(--font-inter)] text-[18px] leading-[21.78px] text-left text-[var(--white-color)] mb-3"
             >
-              Будь ласка, введіть своє ім&apos;я
+              {t('username')}
             </label>
             <input
               type="text"
@@ -96,21 +135,16 @@ const RegisterPage = () => {
               id="username"
               value={form.username}
               onChange={handleChange}
-              placeholder="Ім'я"
-              required
+              placeholder={t('usernamePlaceholder')}
               autoComplete="name"
-              className="w-[320px] md:w-[728px] lg:w-[401px] h-[58px] text-[20px] leading-[24.2px]
-                         text-[var(--black-color)] placeholder:text-[18px] placeholder:leading-[21.78px]
-                         placeholder:text-[var(--primary-color)] bg-white rounded-md outline-none
-                         px-[18px] mb-6"
+              className="w-[320px] md:w-[728px] lg:w-[401px] h-[58px] text-[20px] leading-[24.2px] text-black placeholder:text-[18px] placeholder:leading-[21.78px] placeholder:text-[var(--primary-color)] bg-white rounded-md outline-none px-[18px] mb-6"
             />
 
             <label
               htmlFor="email"
-              className="w-full max-w-[320px] md:max-w-[728px] font-[var(--font-inter)]
-                         text-[18px] leading-[21.78px] text-left text-[var(--white-color)] mb-3"
+              className="w-full max-w-[728px] font-[var(--font-inter)] text-[18px] leading-[21.78px] text-left text-[var(--white-color)] mb-3"
             >
-              Будь ласка, введіть свою електронну адресу
+              {t('email')}
             </label>
             <input
               type="email"
@@ -118,21 +152,17 @@ const RegisterPage = () => {
               id="email"
               value={form.email}
               onChange={handleChange}
-              placeholder="Електронна адреса"
+              placeholder={t('emailPlaceholder')}
               required
               autoComplete="email"
-              className="w-[320px] md:w-[728px] lg:w-[401px] h-[58px] text-[20px] leading-[24.2px]
-                         text-[var(--black-color)] placeholder:text-[18px] placeholder:leading-[21.78px]
-                         placeholder:text-[var(--primary-color)] bg-white rounded-md outline-none
-                         px-[18px] mb-6"
+              className="w-[320px] md:w-[728px] lg:w-[401px] h-[58px] text-[20px] leading-[24.2px] text-black placeholder:text-[18px] placeholder:leading-[21.78px] placeholder:text-[var(--primary-color)] bg-white rounded-md outline-none px-[18px] mb-6"
             />
 
             <label
               htmlFor="password"
-              className="w-full max-w-[320px] md:max-w-[728px] font-[var(--font-inter)]
-                         text-[18px] leading-[21.78px] text-left text-[var(--white-color)] mb-3"
+              className="w-full max-w-[728px] font-[var(--font-inter)] text-[18px] leading-[21.78px] text-left text-[var(--white-color)] mb-3"
             >
-              Будь ласка, введіть свій пароль
+              {t('password')}
             </label>
             <input
               type="password"
@@ -140,63 +170,37 @@ const RegisterPage = () => {
               id="password"
               value={form.password}
               onChange={handleChange}
-              placeholder="Пароль"
+              placeholder={t('passwordPlaceholder')}
               required
               autoComplete="new-password"
-              className="w-[320px] md:w-[728px] lg:w-[401px] h-[58px] text-[20px] leading-[24.2px]
-                         text-[var(--black-color)] placeholder:text-[18px] placeholder:leading-[21.78px]
-                         placeholder:text-[var(--primary-color)] bg-white rounded-md outline-none
-                         px-[18px] mb-6"
+              minLength={6}
+              className="w-[320px] md:w-[728px] lg:w-[401px] h-[58px] text-[20px] leading-[24.2px] text-black placeholder:text-[18px] placeholder:leading-[21.78px] placeholder:text-[var(--primary-color)] bg-white rounded-md outline-none px-[18px] mb-6"
             />
-
-            {/* Если понадобится дата рождения — можно вернуть этот блок и задать pattern/подсказки аналогично */}
 
             <button
               type="submit"
-              className="w-[320px] md:w-[728px] lg:w-[401px] h-[58px] font-[var(--font-lora)]
-                         text-[24px] md:text-[28px] leading-5 uppercase text-[var(--white-color)]
-                         text-center bg-[var(--primary-color)] rounded-md cursor-pointer
-                         mt-0 md:mt-6 mb-6 md:mb-[38px]
-                         transition hover:opacity-90 active:opacity-80
-                         focus:outline-none focus:ring-2
-                         focus:ring-[var(--primary-color)]
-                         focus:ring-offset-2 focus:ring-offset-[var(--black-color)]"
+              disabled={loading}
+              className="w-[320px] md:w-[728px] lg:w-[401px] h-[58px] font-[var(--font-lora)] text-[24px] md:text-[28px] leading-5 uppercase text-[var(--white-color)] text-center bg-[var(--primary-color)] rounded-md cursor-pointer mt-0 md:mt-6 mb-3 transition hover:opacity-90 active:opacity-80 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:ring-offset-2 focus:ring-offset-[var(--black-color)] disabled:opacity-60"
             >
-              Зареєструватися
+              {loading ? t('loading') : t('signupButton')}
             </button>
-          </form>
 
-          <p className="text-[18px] leading-[21.78px] text-center text-[var(--primary-color)] mb-8 md:mb-[38px]">
-            <Link href="/auth/login">У МЕНЕ ВЖЕ Є ПРОФІЛЬ</Link>
-          </p>
-        </div>
-
-        {/* Модалка об ошибке регистрации */}
-        {/* <Modal
-          isOpen={isModalOpen}
-          onRequestClose={() => setIsModalOpen(false)}
-          contentLabel="Ошибка реєстрації"
-        >
-          <div className="flex flex-col items-center justify-center p-5 bg-[var(--white-color)] rounded-lg">
-            <h2 className="font-[var(--font-lora)] text-2xl text-[var(--black-color)] mb-3">
-              Помилка реєстрації
-            </h2>
-            <p className="text-base text-[var(--black-color)] mb-4 text-center">
-              Ця електронна адреса вже зареєстрована.
-            </p>
+            {/* Google */}
             <button
-              onClick={() => setIsModalOpen(false)}
-              className="font-[var(--font-lora)] text-base px-4 py-2 text-[var(--white-color)]
-                         bg-[var(--primary-color)] rounded transition
-                         hover:bg-[var(--black-color)]"
+              type="button"
+              onClick={handleGoogle}
+              disabled={loading}
+              className="w-[320px] md:w-[728px] lg:w-[401px] h-[48px] text-[16px] uppercase text-black bg-white rounded-md border border-neutral-200 hover:border-black disabled:opacity-60"
             >
-              Закрити
+              {t('googleButton')}
             </button>
-          </div>
-        </Modal> */}
+
+            <p className="text-[18px] leading-[21.78px] text-center text-[var(--primary-color)] mb-8 md:mb-[38px]">
+              <Link href={`/${locale}/signin`}>{t('haveProfile')}</Link>
+            </p>
+          </form>
+        </div>
       </div>
     </section>
   );
-};
-
-export default RegisterPage;
+}

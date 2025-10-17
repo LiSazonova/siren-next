@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import Icon from '../Icon';
 import CartIconBadge from '../CartIconBadge';
+import UserAuthToggle from './UserAuthToggle';
 
 const DesktopIcons = () => {
   const locale = useLocale();
@@ -22,9 +23,7 @@ const DesktopIcons = () => {
           <CartIconBadge />
         </li>
         <li className="">
-          <Link href="/collections" className="">
-            <Icon name="user" alt="Instagram" width={24} height={24} />
-          </Link>
+          <UserAuthToggle />
         </li>
       </ul>
     </div>

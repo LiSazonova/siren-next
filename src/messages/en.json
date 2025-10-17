@@ -8,7 +8,8 @@
   },
   "AuthLinks": {
     "signin": "Sign in",
-    "signup": "Sign up"
+    "signup": "Sign up",
+    "logout": "Sign out"
   },
   "Search": {
     "placeholder": "Search",
@@ -30,7 +31,7 @@
     "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
     "title": "Page not found"
   },
-  "About": {
+  "about": {
     "title": "About Us",
     "description": "Siren is a dynamic fashion brand that combines bold elegance with a vibrant sense of individuality. Drawing inspiration from the allure and power of the mythical siren, the brand creates pieces that are as captivating as they are empowering. Each collection from The Siren Official reflects a unique blend of contemporary design with timeless, ethereal elements, creating a wardrobe that appeals to the modern woman who is not afraid to make a statement.",
     "description2": "Siren emphasizes the importance of embracing one’s inner strength and expressing it through fashion. With a focus on striking silhouettes, luxurious fabrics and meticulously crafted details, the brand offers more than just clothing – it offers a way to make a statement. The pieces are designed to exude confidence, sophistication and an unapologetic attitude. Whether you are looking for a bold outfit for a special occasion or an iconic piece for your everyday collection, The Siren ensures that every piece you wear reflects the essence of empowerment and elegance.",
@@ -63,5 +64,47 @@
   "total": "Order total",
   "checkout": "Proceed to checkout",
   "currency": "UAH"
-  }
+  },
+  "loginPage": {
+  "title": "Login",
+"labelEmail":"Please enter your email address",
+"labelPassword":"Please enter your password",
+"forgotPassword": "Forgot your password?",
+"loading": "Logining...",
+"signinButton": "SIGN IN",
+"googleButton": "Sign in with",
+"noProfile": "I DON'T HAVE AN ACCOUNT",
+"email": "Email",
+"password": "Password"
+},
+"registerPage": {
+  "title": "Registration",
+"username": "Please enter your name",
+"usernamePlaceholder": "Name",
+"email": "Please enter your email address",
+"emailPlaceholder": "Please enter your email address",
+"password": "Please enter your password",
+"passwordPlaceholder": "Password",
+"loading": "Registering...",
+"signupButton": "SIGN UP",
+"googleButton": "Sign up with",
+"haveProfile": "I ALREADY HAVE A PROFILE"
+},
+"forgotPassword": {
+  "title": "Forgot your password?",
+  "titleCheck": "Check your mail",
+  "labelEmail": "Please enter your email address",
+  "emailPlaceholder": "Email",
+  "sendButton": "SEND",
+  "loading": "Sending...", 
+  "sentMessage": "Password reset email sent to {email}",
+  "noProfile": "I DON'T HAVE AN ACCOUNT"
+},
+"toggleButtons": {
+  "login": "Login",
+  "register": "Register",
+  "logout": "Logout",
+  "hello": "Hello",
+  "loading": "Loading..."
+}
 }
