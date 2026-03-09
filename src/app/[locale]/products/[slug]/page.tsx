@@ -14,7 +14,7 @@ type PageProps = {
 export async function generateStaticParams() {
   const slugs = await fetchProductSlugs();
   return routing.locales.flatMap((locale) =>
-    slugs.map((slug) => ({ locale, slug }))
+    slugs.map((slug) => ({ locale, slug })),
   );
 }
 
@@ -51,8 +51,13 @@ export default async function ProductPage({ params }: PageProps) {
       </h1>
       <div className="flex flex-col md:flex-row gap-2 md:gap-6">
         <div className="max-w-[320px] md:max-w-[375px] xl:max-w-[474px]">
-          <ProductGallery
+          {/* <ProductGallery
             images={[product.imageTitle, ...(product.images || [])]}
+          /> */}
+          <ProductGallery
+            images={[
+              ...new Set([product.imageTitle, ...(product.images || [])]),
+            ]}
           />
         </div>
 
