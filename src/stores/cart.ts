@@ -54,7 +54,10 @@ export const useCart = create<CartState>()(
           return { items: { ...s.items, [key]: { ...it, qty: Math.max(1, qty) } } };
         }),
 
-      clear: () => ({ items: {} }),
+      clear: () =>
+  set(() => ({
+    items: {},
+  })),
     }),
     {
       name: 'siren-cart',

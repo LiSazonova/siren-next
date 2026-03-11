@@ -26,20 +26,25 @@ export default function CheckoutPage() {
     country: '',
     address: '',
     postalCode: '',
-    delivery: '',
-    payment: '',
   });
 
+  const [deliveryCountry, setDeliveryCountry] = useState('');
+  const [delivery, setDelivery] = useState('');
+  const [payment, setPayment] = useState('');
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+
   const update = (key: string, value: string) => {
-    setForm((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+    setForm((prev) => ({ ...prev, [key]: value }));
   };
 
   const placeOrder = async () => {
-    if (!form.payment || !form.delivery) {
-      alert('Please select delivery and payment method');
+    if (isPlacingOrder) return;
+
+    setIsPlacingOrder(true);
+
+    if (!delivery || !payment) {
+      alert('Select delivery and payment');
+      setIsPlacingOrder(false);
       return;
     }
 
@@ -48,16 +53,34 @@ export default function CheckoutPage() {
         customer: form,
         items,
         total: subtotal,
-        paymentMethod: form.payment,
-        deliveryMethod: form.delivery,
+        deliveryMethod: delivery,
+        paymentMethod: payment,
       });
+
+      try {
+        await fetch('/api/send-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            orderId,
+            customer: form,
+            items,
+            total: subtotal,
+          }),
+        });
+      } catch (e) {
+        console.error('Email failed', e);
+      }
 
       clearCart();
 
-      router.push(`/${locale}/checkout/success?order=${orderId}`);
-    } catch (error) {
-      console.error(error);
+      localStorage.removeItem('siren-cart');
 
+      router.push(`/${locale}/checkout/success?order=${orderId}`);
+    } catch (e) {
+      setIsPlacingOrder(false);
       router.push(`/${locale}/checkout/error`);
     }
   };
@@ -75,7 +98,7 @@ export default function CheckoutPage() {
       <h1 className="text-center text-[28px] uppercase mb-8">{t('title')}</h1>
 
       <div className="grid lg:grid-cols-[1fr_460px] gap-12">
-        {/* LEFT FORM */}
+        {/* LEFT */}
 
         <div className="flex flex-col gap-6">
           <input
@@ -120,61 +143,138 @@ export default function CheckoutPage() {
             onChange={(e) => update('postalCode', e.target.value)}
           />
 
-          {/* DELIVERY */}
+          {/* COUNTRY */}
 
-          <h2 className="uppercase text-xl">{t('delivery.title')}</h2>
+          <h2 className="uppercase text-xl">Delivery country</h2>
 
           <label className="flex gap-2">
             <input
               type="radio"
-              checked={form.delivery === 'ukraine'}
-              onChange={() => update('delivery', 'ukraine')}
+              checked={deliveryCountry === 'ua'}
+              onChange={() => {
+                setDeliveryCountry('ua');
+                setDelivery('');
+                setPayment('');
+              }}
             />
-            {t('delivery.ukraine')}
+            Ukraine
           </label>
 
           <label className="flex gap-2">
             <input
               type="radio"
-              checked={form.delivery === 'world'}
-              onChange={() => update('delivery', 'world')}
+              checked={deliveryCountry === 'world'}
+              onChange={() => {
+                setDeliveryCountry('world');
+                setDelivery('');
+                setPayment('');
+              }}
             />
-            {t('delivery.world')}
+            International
           </label>
+
+          {/* DELIVERY UA */}
+
+          {deliveryCountry === 'ua' && (
+            <>
+              <h2 className="uppercase text-xl">Delivery</h2>
+
+              <label>
+                <input
+                  type="radio"
+                  checked={delivery === 'nova'}
+                  onChange={() => setDelivery('nova')}
+                />
+                Nova Poshta
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  checked={delivery === 'ukr'}
+                  onChange={() => setDelivery('ukr')}
+                />
+                Ukrposhta
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  checked={delivery === 'courier'}
+                  onChange={() => setDelivery('courier')}
+                />
+                Courier
+              </label>
+            </>
+          )}
+
+          {/* DELIVERY WORLD */}
+
+          {deliveryCountry === 'world' && (
+            <>
+              <h2 className="uppercase text-xl">Delivery</h2>
+
+              <label>
+                <input
+                  type="radio"
+                  checked={delivery === 'intl_ukr'}
+                  onChange={() => setDelivery('intl_ukr')}
+                />
+                Ukrposhta International
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  checked={delivery === 'dhl'}
+                  onChange={() => setDelivery('dhl')}
+                />
+                DHL
+              </label>
+            </>
+          )}
 
           {/* PAYMENT */}
 
-          <h2 className="uppercase text-xl">{t('payment.title')}</h2>
+          {delivery && (
+            <>
+              <h2 className="uppercase text-xl">Payment</h2>
 
-          <label className="flex gap-2">
-            <input
-              type="radio"
-              checked={form.payment === 'card'}
-              onChange={() => update('payment', 'card')}
-            />
-            {t('payment.card')}
-          </label>
+              <label>
+                <input
+                  type="radio"
+                  checked={payment === 'card'}
+                  onChange={() => setPayment('card')}
+                />
+                Card
+              </label>
 
-          <label className="flex gap-2">
-            <input
-              type="radio"
-              checked={form.payment === 'cod'}
-              onChange={() => update('payment', 'cod')}
-            />
-            {t('payment.cod')}
-          </label>
+              {deliveryCountry === 'ua' && (
+                <label>
+                  <input
+                    type="radio"
+                    checked={payment === 'cod'}
+                    onChange={() => setPayment('cod')}
+                  />
+                  Cash on delivery
+                </label>
+              )}
 
-          <label className="flex gap-2">
-            <input
-              type="radio"
-              checked={form.payment === 'paypal'}
-              onChange={() => update('payment', 'paypal')}
-            />
-            PayPal
-          </label>
+              {deliveryCountry === 'world' && (
+                <label>
+                  <input
+                    type="radio"
+                    checked={payment === 'paypal'}
+                    onChange={() => setPayment('paypal')}
+                  />
+                  PayPal
+                </label>
+              )}
+            </>
+          )}
         </div>
 
-        {/* RIGHT SUMMARY */}
+        {/* RIGHT */}
 
         <div className="border-l pl-6">
           {items.map((it) => {
@@ -184,14 +284,13 @@ export default function CheckoutPage() {
             return (
               <div key={it.key} className="flex justify-between py-6 border-b">
                 <div>
-                  <h3 className="text-[18px]">{it.name}</h3>
+                  <h3>{it.name}</h3>
 
                   <Image
                     src={imageSrc}
                     alt={it.name}
-                    width={188}
+                    width={180}
                     height={240}
-                    className="object-cover"
                   />
                 </div>
 
@@ -227,9 +326,10 @@ export default function CheckoutPage() {
 
           <button
             onClick={placeOrder}
-            className="w-full mt-6 py-4 bg-black text-white uppercase"
+            disabled={!delivery || !payment || isPlacingOrder}
+            className="w-full mt-6 py-4 bg-black text-white uppercase disabled:opacity-40"
           >
-            {t('placeOrder')}
+            {isPlacingOrder ? 'Processing...' : t('placeOrder')}
           </button>
         </div>
       </div>
