@@ -133,6 +133,13 @@
 
   "total": "Total",
   "placeOrder": "Place order",
-  "currency": "UAH"
+  "currency": "UAH",
+
+  "Success": {
+    "title": "Thank you for your order",
+    "orderNumber": "Order number",
+    "text": "We will contact you shortly to confirm your order.",
+    "continue": "Continue shopping"
+}
 }
 }

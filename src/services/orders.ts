@@ -1,5 +1,5 @@
 import { getNextOrderNumber } from "@/lib/getNextOrderNumber";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/config/firebase";
 
 export async function createOrder({
@@ -14,24 +14,17 @@ export async function createOrder({
 
   const order = {
     orderNumber,
-
     customer,
     items,
     total,
-
     paymentMethod,
     deliveryMethod,
-
     paymentStatus: paymentMethod === "cod" ? "unpaid" : "pending",
     status: "new",
-
     createdAt: serverTimestamp()
   }
 
-  const docRef = await addDoc(collection(db, "orders"), order)
+  await setDoc(doc(db, "orders", String(orderNumber)), order)
 
-  return {
-    firebaseId: docRef.id,
-    orderNumber
-  }
+  return orderNumber
 }

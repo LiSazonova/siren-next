@@ -1,14 +1,33 @@
+'use client';
+
+import { useSearchParams } from 'next/navigation';
+import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 
 export default function SuccessPage() {
+  const params = useSearchParams();
+  const t = useTranslations('checkout.Success');
+  const locale = useLocale();
+
+  const order = params.get('order');
+
   return (
-    <main className="max-w-[600px] mx-auto text-center py-32">
-      <h1 className="text-3xl mb-6">Thank you for your order</h1>
+    <main className="max-w-[700px] mx-auto py-24 text-center">
+      <h1 className="text-3xl uppercase mb-6">{t('title')}</h1>
 
-      <p className="mb-8">Your order has been successfully placed.</p>
+      {order && (
+        <p className="text-lg mb-6">
+          {t('orderNumber')}: <b>#{order}</b>
+        </p>
+      )}
 
-      <Link href="/" className="px-6 py-3 bg-black text-white">
-        Continue shopping
+      <p className="mb-10 text-gray-600">{t('text')}</p>
+
+      <Link
+        href={`/${locale}`}
+        className="inline-block px-8 py-4 bg-black text-white uppercase"
+      >
+        {t('continue')}
       </Link>
     </main>
   );
