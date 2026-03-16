@@ -9,7 +9,7 @@ import {
   signInWithPopup,
   updateProfile,
 } from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/firebaseClient';
+import { auth, googleProvider } from '@/lib/firebase/client';
 import { useLocale, useTranslations } from 'next-intl';
 
 type Props = { returnUrl?: string };
@@ -52,7 +52,7 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
       const { user } = await createUserWithEmailAndPassword(
         auth,
         form.email,
-        form.password
+        form.password,
       );
       if (user && form.username.trim()) {
         await updateProfile(user, { displayName: form.username.trim() });

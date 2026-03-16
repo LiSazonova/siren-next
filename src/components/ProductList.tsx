@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ProductCard from './ProductCard';
-import type { Product } from '@/services/firebase';
+import { Product } from '@/lib/firebase/products';
 
 interface ProductListProps {
   products: Product[];

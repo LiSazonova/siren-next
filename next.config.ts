@@ -5,8 +5,13 @@ const withNextIntl = createNextIntlPlugin();
 
 const config: NextConfig = {
     images: {
-      domains: ['res.cloudinary.com'],
-    },
+  remotePatterns: [
+    {
+      protocol: "https",
+      hostname: "res.cloudinary.com"
+    }
+  ]
+}
   };
 
 export default withNextIntl(config);

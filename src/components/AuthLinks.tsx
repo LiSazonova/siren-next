@@ -1,38 +1,3 @@
-// import Link from 'next/link';
-// import { useTranslations, useLocale } from 'next-intl';
-// import { usePathname } from 'next/navigation';
-
-// interface Props {
-//   onClick?: () => void;
-// }
-
-// const AuthLinks: React.FC<Props> = ({ onClick }) => {
-//   const t = useTranslations('AuthLinks');
-//   const locale = useLocale();
-//   const pathname = usePathname() || '/';
-//   const ret = encodeURIComponent(pathname);
-
-//   return (
-//     <div className="flex flex-row items-center justify-center gap-8 py-8 px-6 text-[18px] border-b border-gray uppercase">
-//       <Link
-//         href={`/${locale}/signin?returnUrl=${ret}`}
-//         onClick={onClick}
-//         className="hover:underline"
-//       >
-//         {t('signin')}
-//       </Link>
-//       <Link
-//         href={`/${locale}/signup?returnUrl=${ret}`}
-//         onClick={onClick}
-//         className="hover:underline"
-//       >
-//         {t('signup')}
-//       </Link>
-//     </div>
-//   );
-// };
-
-// export default AuthLinks;
 'use client';
 
 import Link from 'next/link';
@@ -40,7 +5,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
 import useAuthUser from '@/hooks/useAuthUser';
 import { signOut } from 'firebase/auth';
-import { auth } from '@/lib/firebaseClient';
+import { auth } from '@/lib/firebase/client';
 import { useState } from 'react';
 
 interface Props {

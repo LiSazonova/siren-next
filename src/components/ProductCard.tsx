@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import Icon from './Icon';
-import type { Product } from '@/services/firebase';
+import { Product } from '@/lib/firebase/products';
 import useCart from '@/stores/cart';
 
 interface ProductCardProps {

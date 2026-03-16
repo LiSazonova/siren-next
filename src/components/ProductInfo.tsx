@@ -1,11 +1,10 @@
 'use client';
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
-import type { Product } from '@/services/firebase';
+import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import Modal from './Modal';
 import useCart from '@/stores/cart';
 import { useRouter } from 'next/navigation';
+import { Product } from '@/lib/firebase/products';
 
 interface InfoProps {
   product: Product;

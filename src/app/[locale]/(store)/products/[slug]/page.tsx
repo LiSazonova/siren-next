@@ -5,7 +5,7 @@ import { hasLocale } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import ProductGallery from '@/components/ProductGallery';
 import ProductInfo from '@/components/ProductInfo';
-import { fetchProductBySlug, fetchProductSlugs } from '@/services/firebase';
+import { fetchProductBySlug, fetchProductSlugs } from '@/lib/firebase/products';
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;

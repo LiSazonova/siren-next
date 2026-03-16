@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/firebaseClient';
+import { auth, googleProvider } from '@/lib/firebase/client';
 import { useLocale, useTranslations } from 'next-intl';
 import Icon from '@/components/Icon';
 

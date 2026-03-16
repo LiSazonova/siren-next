@@ -1,21 +1,7 @@
-
-// import createMiddleware from 'next-intl/middleware';
-
-// export default createMiddleware({
-//   locales: ['en', 'ua'],
-//   defaultLocale: 'en',
-//   localePrefix: 'always', 
-// });
-
-// export const config = {
-//   matcher: ['/((?!_next|.*\\..*|api).*)']
-// };
-
-// middleware.ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
-import { adminAuth } from '@/lib/firebaseAdmin';
+import { adminAuth } from '@/lib/firebase/admin';
 
 const intl = createIntlMiddleware({
   locales: ['en', 'ua'],

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale } from 'next-intl'; // нужен только для формирования URL с локалью
-import { fetchCollections } from '@/services/firebase';
+import { fetchCollections } from '@/lib/firebase/products';
 
 interface Collection {
   title: string;

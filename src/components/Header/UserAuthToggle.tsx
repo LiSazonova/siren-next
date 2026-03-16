@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Icon from '@/components/Icon';
 import useAuthUser from '@/hooks/useAuthUser';
-import { auth } from '@/lib/firebaseClient';
+import { auth } from '@/lib/firebase/client';
 import { signOut } from 'firebase/auth';
 import { useLocale, useTranslations } from 'next-intl';
 

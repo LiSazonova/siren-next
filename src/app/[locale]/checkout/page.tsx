@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCartItems, useCartSubtotal, useCart } from '@/stores/cart';
-import { createOrder } from '@/services/orders';
+import { createOrder } from '@/lib/orders/createOrder';
 import { useLocale, useTranslations } from 'next-intl';
 
 export default function CheckoutPage() {

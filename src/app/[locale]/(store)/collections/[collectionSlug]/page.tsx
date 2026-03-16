@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import ProductList from '@/components/ProductList';
-import { fetchProductsByCollection } from '@/services/firebase';
+import { fetchProductsByCollection } from '@/lib/firebase/products';
 
 interface PageProps {
   params: Promise<{

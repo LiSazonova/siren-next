@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '@/lib/firebaseClient';
+import { auth } from '@/lib/firebase/client';
 import { useLocale, useTranslations } from 'next-intl';
 
 export default function ForgotPasswordPage() {
