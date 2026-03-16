@@ -1,13 +1,13 @@
 interface Props {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 
-export default function OrderPage({ params }: Props) {
+export default async function OrderPage({ params }: Props) {
+  const { id } = await params;
+
   return (
     <div style={{ padding: '40px' }}>
-      <h1>Order #{params.id}</h1>
+      <h1>Order #{id}</h1>
     </div>
   );
 }
