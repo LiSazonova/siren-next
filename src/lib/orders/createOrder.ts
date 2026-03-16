@@ -1,6 +1,6 @@
-import { getNextOrderNumber } from "@/lib/getNextOrderNumber";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/config/firebase";
+import { getNextOrderNumber } from "./getNextOrderNumber";
+import { db } from "../firebase/client";
 
 export async function createOrder({
   customer,

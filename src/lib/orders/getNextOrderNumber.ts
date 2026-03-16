@@ -1,5 +1,5 @@
 import { doc, runTransaction } from "firebase/firestore"
-import { db } from "@/config/firebase"
+import { db } from "../firebase/client"
 
 export async function getNextOrderNumber() {
 
