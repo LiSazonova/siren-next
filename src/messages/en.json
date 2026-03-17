@@ -108,38 +108,46 @@
   "loading": "Loading..."
 },
 "checkout": {
-  "title": "Checkout",
+    "title": "Checkout",
 
-  "placeholders": {
-    "name": "Name",
-    "email": "Email",
-    "phone": "Phone number",
-    "country": "Country",
-    "address": "Address",
-    "postalCode": "Postal code"
+    "delivery": "Delivery",
+    "payment": "Payment",
+
+    "ua": "Ukraine",
+    "world": "Worldwide",
+
+    "card": "Card",
+    "cod": "Cash on delivery",
+    "paypal": "PayPal",
+
+    "agree": "I agree with terms",
+
+    "placeholders": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "country": "Country",
+      "address": "Address",
+      "postalCode": "Postal code"
+    },
+
+    "validation": {
+      "required": "Fill required fields",
+      "delivery": "Select delivery",
+      "payment": "Select payment",
+      "agree": "You must agree with terms"
+    },
+
+    "total": "Total",
+    "placeOrder": "Place order",
+    "processing": "Processing...",
+    "currency": "UAH"
   },
 
-  "delivery": {
-    "title": "Delivery",
-    "ukraine": "Delivery within Ukraine",
-    "world": "International delivery"
-  },
-
-  "payment": {
-    "title": "Payment method",
-    "card": "Card payment",
-    "cod": "Cash on delivery"
-  },
-
-  "total": "Total",
-  "placeOrder": "Place order",
-  "currency": "UAH",
-
-  "Success": {
+  "success": {
     "title": "Thank you for your order",
     "orderNumber": "Order number",
-    "text": "We will contact you shortly to confirm your order.",
+    "text": "We will contact you shortly.",
     "continue": "Continue shopping"
-}
-}
+  }
 }

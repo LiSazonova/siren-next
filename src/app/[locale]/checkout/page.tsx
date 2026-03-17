@@ -31,6 +31,7 @@ export default function CheckoutPage() {
   const [deliveryCountry, setDeliveryCountry] = useState('');
   const [delivery, setDelivery] = useState('');
   const [payment, setPayment] = useState('');
+  const [agree, setAgree] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const update = (key: string, value: string) => {
@@ -40,10 +41,33 @@ export default function CheckoutPage() {
   const placeOrder = async () => {
     if (isPlacingOrder) return;
 
+    if (payment === 'card') {
+      alert('Payment will be processed on next step');
+    }
+
     setIsPlacingOrder(true);
 
-    if (!delivery || !payment) {
+    // ✅ ВАЛИДАЦИЯ
+    if (!form.name || !form.email || !form.phone) {
+      alert('Fill required fields');
+      setIsPlacingOrder(false);
+      return;
+    }
+
+    if (!deliveryCountry) {
+      alert('Select delivery country');
+      setIsPlacingOrder(false);
+      return;
+    }
+
+    if (!deliveryCountry || !payment) {
       alert('Select delivery and payment');
+      setIsPlacingOrder(false);
+      return;
+    }
+
+    if (!agree) {
+      alert('You must agree with terms');
       setIsPlacingOrder(false);
       return;
     }
@@ -53,8 +77,9 @@ export default function CheckoutPage() {
         customer: form,
         items,
         total: subtotal,
-        deliveryMethod: delivery,
+        deliveryMethod: deliveryCountry,
         paymentMethod: payment,
+        deliveryCountry,
       });
 
       try {
@@ -68,6 +93,9 @@ export default function CheckoutPage() {
             customer: form,
             items,
             total: subtotal,
+            deliveryMethod: deliveryCountry,
+            paymentMethod: payment,
+            deliveryCountry,
           }),
         });
       } catch (e) {
@@ -75,7 +103,6 @@ export default function CheckoutPage() {
       }
 
       clearCart();
-
       localStorage.removeItem('siren-cart');
 
       router.push(`/${locale}/checkout/success?order=${orderId}`);
@@ -143,9 +170,11 @@ export default function CheckoutPage() {
             onChange={(e) => update('postalCode', e.target.value)}
           />
 
-          {/* COUNTRY */}
+          {/* DELIVERY */}
 
-          <h2 className="uppercase text-xl">Delivery country</h2>
+          <h2 className="uppercase text-xl">{t('delivery')}</h2>
+
+          {/* UA */}
 
           <label className="flex gap-2">
             <input
@@ -153,125 +182,123 @@ export default function CheckoutPage() {
               checked={deliveryCountry === 'ua'}
               onChange={() => {
                 setDeliveryCountry('ua');
-                setDelivery('');
+                setDelivery('nova'); // default
                 setPayment('');
               }}
             />
-            Ukraine
+            {t('ua')}
           </label>
 
-          <label className="flex gap-2">
+          {deliveryCountry === 'ua' && (
+            <div className="pl-6 flex flex-col gap-4">
+              <p className="text-sm text-gray-500">
+                Доставка здійснюється Новою Поштою.
+              </p>
+
+              <input
+                className="border p-4"
+                placeholder="Поштовий індекс"
+                value={form.postalCode}
+                onChange={(e) => update('postalCode', e.target.value)}
+              />
+            </div>
+          )}
+
+          {/* WORLD */}
+
+          <label className="flex gap-2 mt-4">
             <input
               type="radio"
               checked={deliveryCountry === 'world'}
               onChange={() => {
                 setDeliveryCountry('world');
-                setDelivery('');
+                setDelivery('intl');
                 setPayment('');
               }}
             />
-            International
+            {t('world')}
           </label>
 
-          {/* DELIVERY UA */}
-
-          {deliveryCountry === 'ua' && (
-            <>
-              <h2 className="uppercase text-xl">Delivery</h2>
-
-              <label>
-                <input
-                  type="radio"
-                  checked={delivery === 'nova'}
-                  onChange={() => setDelivery('nova')}
-                />
-                Nova Poshta
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  checked={delivery === 'ukr'}
-                  onChange={() => setDelivery('ukr')}
-                />
-                Ukrposhta
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  checked={delivery === 'courier'}
-                  onChange={() => setDelivery('courier')}
-                />
-                Courier
-              </label>
-            </>
-          )}
-
-          {/* DELIVERY WORLD */}
-
           {deliveryCountry === 'world' && (
-            <>
-              <h2 className="uppercase text-xl">Delivery</h2>
+            <div className="pl-6 flex flex-col gap-4">
+              <p className="text-sm text-gray-500">Please enter ZIP code</p>
 
-              <label>
-                <input
-                  type="radio"
-                  checked={delivery === 'intl_ukr'}
-                  onChange={() => setDelivery('intl_ukr')}
-                />
-                Ukrposhta International
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  checked={delivery === 'dhl'}
-                  onChange={() => setDelivery('dhl')}
-                />
-                DHL
-              </label>
-            </>
+              <input
+                className="border p-4"
+                placeholder="ZIP code"
+                value={form.postalCode}
+                onChange={(e) => update('postalCode', e.target.value)}
+              />
+            </div>
           )}
 
           {/* PAYMENT */}
 
-          {delivery && (
+          {deliveryCountry && (
             <>
-              <h2 className="uppercase text-xl">Payment</h2>
+              <h2 className="uppercase text-xl mt-6">Payment</h2>
 
-              <label>
+              {/* CARD */}
+
+              <label className="flex gap-2">
                 <input
                   type="radio"
                   checked={payment === 'card'}
                   onChange={() => setPayment('card')}
                 />
-                Card
+                {t('card')}
               </label>
 
+              {payment === 'card' && (
+                <div className="pl-6 flex flex-col gap-4">
+                  <input className="border p-4" placeholder="Номер карти" />
+                  <input className="border p-4" placeholder="MM/YY" />
+                  <input className="border p-4" placeholder="CVV" />
+                </div>
+              )}
+
+              {/* COD (UA ONLY) */}
+
               {deliveryCountry === 'ua' && (
-                <label>
+                <label className="flex gap-2 mt-2">
                   <input
                     type="radio"
                     checked={payment === 'cod'}
                     onChange={() => setPayment('cod')}
                   />
-                  Cash on delivery
+                  {t('cod')} (тільки Україна)
                 </label>
               )}
 
-              {deliveryCountry === 'world' && (
-                <label>
-                  <input
-                    type="radio"
-                    checked={payment === 'paypal'}
-                    onChange={() => setPayment('paypal')}
-                  />
-                  PayPal
-                </label>
+              {/* PAYPAL */}
+
+              <label className="flex gap-2 mt-2">
+                <input
+                  type="radio"
+                  checked={payment === 'paypal'}
+                  onChange={() => setPayment('paypal')}
+                />
+                PayPal
+              </label>
+
+              {payment === 'paypal' && (
+                <p className="pl-6 text-sm text-gray-500">
+                  Після оформлення вас буде перенаправлено на PayPal
+                </p>
               )}
             </>
           )}
+
+          {/* ✅ AGREEMENT */}
+
+          <label className="flex gap-2 mt-4">
+            <input
+              type="checkbox"
+              checked={agree}
+              onChange={(e) => setAgree(e.target.checked)}
+            />
+            I agree with terms
+          </label>
         </div>
 
         {/* RIGHT */}
@@ -318,7 +345,6 @@ export default function CheckoutPage() {
 
           <div className="flex justify-between mt-6 text-xl uppercase">
             <span>{t('total')}</span>
-
             <span>
               {subtotal} {t('currency')}
             </span>
@@ -326,7 +352,7 @@ export default function CheckoutPage() {
 
           <button
             onClick={placeOrder}
-            disabled={!delivery || !payment || isPlacingOrder}
+            disabled={!deliveryCountry || !payment || !agree || isPlacingOrder}
             className="w-full mt-6 py-4 bg-black text-white uppercase disabled:opacity-40"
           >
             {isPlacingOrder ? 'Processing...' : t('placeOrder')}

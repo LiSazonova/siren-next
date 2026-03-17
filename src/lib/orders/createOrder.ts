@@ -7,10 +7,11 @@ export async function createOrder({
   items,
   total,
   paymentMethod,
-  deliveryMethod
+  deliveryMethod,
+  deliveryCountry,
 }: any) {
 
-  const orderNumber = await getNextOrderNumber()
+  const orderNumber = await getNextOrderNumber();
 
   const order = {
     orderNumber,
@@ -19,12 +20,15 @@ export async function createOrder({
     total,
     paymentMethod,
     deliveryMethod,
+    deliveryCountry,
+
     paymentStatus: paymentMethod === "cod" ? "unpaid" : "pending",
     status: "new",
-    createdAt: serverTimestamp()
-  }
 
-  await setDoc(doc(db, "orders", String(orderNumber)), order)
+    createdAt: serverTimestamp(),
+  };
 
-  return orderNumber
+  await setDoc(doc(db, "orders", String(orderNumber)), order);
+
+  return orderNumber;
 }
