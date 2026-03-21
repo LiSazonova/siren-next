@@ -13,12 +13,32 @@ export interface Customer {
   address: string
 }
 
+export type PaymentMethod = 'card' | 'paypal' | 'cod'
+export type PaymentStatus = 'pending' | 'paid' | 'failed'
+
+export type OrderStatus =
+  | 'new'
+  | 'processing'
+  | 'shipped'
+  | 'delivered'
+  | 'cancelled'
+
 export interface Order {
   id: string
   orderNumber: number
+
   customer: Customer
   items: OrderItem[]
+
   total: number
-  status?: string
+
+  paymentMethod: PaymentMethod
+  paymentStatus: PaymentStatus
+
+  status: OrderStatus
+
+  deliveryMethod: string
+  deliveryCountry: string
+
   createdAt?: any
 }

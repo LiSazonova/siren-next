@@ -41,21 +41,11 @@ export default function CheckoutPage() {
   const placeOrder = async () => {
     if (isPlacingOrder) return;
 
-    if (payment === 'card') {
-      alert('Payment will be processed on next step');
-    }
-
     setIsPlacingOrder(true);
 
     // ✅ ВАЛИДАЦИЯ
     if (!form.name || !form.email || !form.phone) {
       alert('Fill required fields');
-      setIsPlacingOrder(false);
-      return;
-    }
-
-    if (!deliveryCountry) {
-      alert('Select delivery country');
       setIsPlacingOrder(false);
       return;
     }
@@ -77,23 +67,22 @@ export default function CheckoutPage() {
         customer: form,
         items,
         total: subtotal,
-        deliveryMethod: deliveryCountry,
-        paymentMethod: payment,
+        deliveryMethod: delivery,
         deliveryCountry,
+        paymentMethod: payment as 'card' | 'paypal' | 'cod',
       });
 
+      // 📩 EMAIL (оставляем как есть)
       try {
         await fetch('/api/send-order', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             orderId,
             customer: form,
             items,
             total: subtotal,
-            deliveryMethod: deliveryCountry,
+            deliveryMethod: delivery,
             paymentMethod: payment,
             deliveryCountry,
           }),
@@ -102,10 +91,37 @@ export default function CheckoutPage() {
         console.error('Email failed', e);
       }
 
-      clearCart();
-      localStorage.removeItem('siren-cart');
+      // 🔥 ЛОГИКА ОПЛАТЫ
 
-      router.push(`/${locale}/checkout/success?order=${orderId}`);
+      // 1. НАЛОЖКА → сразу success
+      if (payment === 'cod') {
+        clearCart();
+        localStorage.removeItem('siren-cart');
+
+        router.push(`/${locale}/checkout/success?order=${orderId}`);
+        return;
+      }
+
+      // 2. CARD → (пока имитация)
+      if (payment === 'card') {
+        // тут позже будет WayForPay
+
+        // пока просто редирект как будто успешно
+        clearCart();
+        localStorage.removeItem('siren-cart');
+
+        router.push(`/${locale}/checkout/success?order=${orderId}`);
+        return;
+      }
+
+      // 3. PAYPAL → редирект
+      if (payment === 'paypal') {
+        // 🔥 ВРЕМЕННО:
+        // потом будет реальный PayPal redirect
+
+        window.location.href = `/${locale}/checkout/success?order=${orderId}`;
+        return;
+      }
     } catch (e) {
       setIsPlacingOrder(false);
       router.push(`/${locale}/checkout/error`);

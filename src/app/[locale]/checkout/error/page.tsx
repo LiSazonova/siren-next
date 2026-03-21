@@ -1,14 +1,27 @@
+import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
-export default function ErrorPage() {
+type Props = {
+  params: { locale: string };
+};
+
+export default async function ErrorPage({ params }: Props) {
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: 'success',
+  });
+
   return (
-    <main className="max-w-[600px] mx-auto text-center py-32">
-      <h1 className="text-3xl mb-6">Order error</h1>
+    <main className="max-w-[700px] mx-auto py-24 text-center">
+      <h1 className="text-3xl uppercase mb-6">Помилка замовлення</h1>
 
-      <p className="mb-8">Something went wrong while placing your order.</p>
+      <p className="mb-10 text-gray-600">Спробуйте ще раз</p>
 
-      <Link href="/checkout" className="px-6 py-3 bg-black text-white">
-        Try again
+      <Link
+        href={`/${params.locale}/checkout`}
+        className="inline-block px-8 py-4 bg-black text-white uppercase"
+      >
+        Назад до оформлення
       </Link>
     </main>
   );
