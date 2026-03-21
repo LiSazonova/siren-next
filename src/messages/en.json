@@ -145,9 +145,18 @@
   },
 
   "success": {
-    "title": "Thank you for your order",
+    "title": "Order successful",
     "orderNumber": "Order number",
-    "text": "We will contact you shortly.",
+    "paymentStatus": "Payment status",
+    "orderStatus": "Order status",
+    "text": "Thank you for your purchase. We are processing your order and will send confirmation via email.",
     "continue": "Continue shopping"
+  },
+
+  "error": {
+    "title": "Something went wrong",
+    "text": "Unfortunately, we couldn't process your order. Please try again or contact us.",
+    "retry": "Try again",
+    "home": "Go home"
   }
 }

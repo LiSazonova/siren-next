@@ -6,36 +6,35 @@ type Props = {
   params: {
     locale: string;
   };
-  searchParams: {
+  searchParams: Promise<{
     order?: string;
-  };
+  }>;
 };
 
 export default async function SuccessPage({ params, searchParams }: Props) {
-  const query = await searchParams;
-  const orderId = query.order;
-
-  if (!orderId) {
-    redirect(`/${params.locale}/checkout/error`);
-  }
-
-  const order = await getOrderById(orderId);
+  const { order } = await searchParams;
 
   if (!order) {
     redirect(`/${params.locale}/checkout/error`);
   }
 
-  if (order.paymentStatus === 'failed') {
+  const orderData = await getOrderById(order);
+
+  if (!orderData) {
+    redirect(`/${params.locale}/checkout/error`);
+  }
+
+  if (orderData.paymentStatus === 'failed') {
     redirect(`/${params.locale}/checkout/error`);
   }
 
   return (
     <SuccessClient
       order={{
-        id: order.id,
-        orderNumber: order.orderNumber,
-        paymentStatus: order.paymentStatus,
-        status: order.status,
+        id: orderData.id,
+        orderNumber: String(orderData.orderNumber),
+        paymentStatus: orderData.paymentStatus,
+        status: orderData.status,
       }}
     />
   );

@@ -2,16 +2,22 @@
 
 import { useLocale } from 'next-intl';
 import { useRouter, usePathname } from '@/i18n/navigation';
+import { useSearchParams } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 
 export default function LocaleSwitcher() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const changeLocale = (newLocale: string) => {
     if (newLocale !== locale) {
-      router.replace(pathname, { locale: newLocale });
+      const query = searchParams.toString();
+
+      router.replace(`${pathname}${query ? `?${query}` : ''}`, {
+        locale: newLocale,
+      });
     }
   };
 
@@ -21,12 +27,13 @@ export default function LocaleSwitcher() {
         <span key={cur} className="flex gap-1">
           <button
             onClick={() => changeLocale(cur)}
-            className={`bg-transparent border-none p-0 m-0  ${
-              cur === locale ? ' text-black' : 'font-normal text-gray'
+            className={`bg-transparent border-none p-0 m-0 ${
+              cur === locale ? 'text-black' : 'font-normal text-gray'
             }`}
           >
             {cur.toUpperCase()}
           </button>
+
           {idx < routing.locales.length - 1 && (
             <span className="bg-gray w-[1px] h-[28px] mr-1"></span>
           )}
