@@ -1,6 +1,6 @@
 import '@/app/globals.css';
 import Header from '@/components/Header/Header';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { routing } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
@@ -27,8 +27,12 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <NextIntlClientProvider locale={locale}>
-      <Header />
+      <Suspense fallback={null}>
+        <Header />
+      </Suspense>
+
       {children}
+
       <ToastContainer position="top-right" />
     </NextIntlClientProvider>
   );
