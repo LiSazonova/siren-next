@@ -114,9 +114,11 @@
     "payment": "Payment",
 
     "ua": "Ukraine",
+    "deliveryDescriptionUA": "Delivery is provided by Nova Poshta",
     "world": "Worldwide",
 
     "card": "Card",
+    "cardDescription": "After placing the order, you will be redirected to payment",
     "cod": "Cash on delivery",
     "paypal": "PayPal",
 
