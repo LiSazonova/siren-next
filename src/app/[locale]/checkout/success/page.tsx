@@ -26,10 +26,6 @@ export default async function SuccessPage({ params, searchParams }: Props) {
     redirect(`/${locale}/checkout/error`);
   }
 
-  if (orderData.paymentStatus === 'failed') {
-    redirect(`/${locale}/checkout/error`);
-  }
-
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <SuccessClient
