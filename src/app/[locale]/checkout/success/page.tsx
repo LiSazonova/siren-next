@@ -3,16 +3,13 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import SuccessClient from './SuccessClient';
 
-type Props = {
-  params: {
-    locale: string;
-  };
-  searchParams: {
-    order?: string;
-  };
-};
-
-export default async function SuccessPage({ params, searchParams }: Props) {
+export default async function SuccessPage({
+  params,
+  searchParams,
+}: {
+  params: { locale: string };
+  searchParams: { order?: string };
+}) {
   const { locale } = params;
   const orderId = searchParams.order;
 
