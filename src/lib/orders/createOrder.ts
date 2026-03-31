@@ -3,7 +3,7 @@ import { getNextOrderNumber } from "./getNextOrderNumber";
 import { db } from "../firebase/client";
 
 type PaymentMethod = "card" | "paypal" | "cod";
-type PaymentStatus = "pending" | "paid" | "failed";
+type PaymentStatus = "pending" | "paid" | "failed" | "unpaid";
 type OrderStatus = "new" | "processing" | "shipped" | "delivered" | "cancelled";
 
 type CreateOrderParams = {
@@ -33,6 +33,13 @@ export async function createOrder({
 
   const orderNumber = await getNextOrderNumber();
 
+  // 🔥 правильная логика статусов
+  let paymentStatus: PaymentStatus = "pending";
+
+  if (paymentMethod === "cod") {
+    paymentStatus = "unpaid";
+  }
+
   const order = {
     id: String(orderNumber),
 
@@ -42,7 +49,7 @@ export async function createOrder({
     total,
 
     paymentMethod,
-    paymentStatus: "pending" as PaymentStatus,
+    paymentStatus,
 
     status: "new" as OrderStatus,
 
@@ -55,7 +62,7 @@ export async function createOrder({
   // ✅ сохраняем заказ
   await setDoc(doc(db, "orders", String(orderNumber)), order);
 
-  // 🔥 ВАЖНО — вызываем API (email + telegram)
+  // 📩 уведомления (email + telegram)
   try {
     await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/send-order`, {
       method: 'POST',

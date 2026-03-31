@@ -16,7 +16,6 @@ export default function CheckoutPage() {
 
   const items = useCartItems();
   const subtotal = useCartSubtotal();
-
   const clearCart = useCart((s) => s.clear);
 
   const [form, setForm] = useState({
@@ -33,35 +32,28 @@ export default function CheckoutPage() {
   );
   const [delivery, setDelivery] = useState('');
   const [payment, setPayment] = useState<'card' | 'paypal' | 'cod' | ''>('');
-  const [agree, setAgree] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const update = (key: string, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
+  // ✅ ВАЛИДАЦИЯ
+  const isFormValid =
+    form.name &&
+    form.email &&
+    form.phone &&
+    form.country &&
+    form.address &&
+    deliveryCountry &&
+    payment &&
+    (deliveryCountry === 'ua' ? form.postalCode : true);
+
+  // 🚀 SUBMIT
   const placeOrder = async () => {
-    if (isPlacingOrder) return;
+    if (isPlacingOrder || !isFormValid) return;
 
     setIsPlacingOrder(true);
-
-    if (!form.name || !form.email || !form.phone) {
-      alert('Fill required fields');
-      setIsPlacingOrder(false);
-      return;
-    }
-
-    if (!deliveryCountry || !payment || !form.postalCode) {
-      alert('Fill delivery & payment');
-      setIsPlacingOrder(false);
-      return;
-    }
-
-    if (!agree) {
-      alert('Agree with terms');
-      setIsPlacingOrder(false);
-      return;
-    }
 
     try {
       const orderId = await createOrder({
@@ -73,17 +65,65 @@ export default function CheckoutPage() {
         paymentMethod: payment,
       });
 
+      // 🚚 COD
       if (payment === 'cod') {
         clearCart();
         router.push(`/${locale}/checkout/success?order=${orderId}`);
         return;
       }
 
-      // 🔥 позже сюда WayForPay
-      router.push(`/${locale}/checkout/success?order=${orderId}`);
-    } catch {
-      setIsPlacingOrder(false);
+      // 🌍 PAYPAL
+      if (payment === 'paypal') {
+        clearCart();
+        router.push(`/${locale}/checkout/success?order=${orderId}`);
+        return;
+      }
+
+      // 💳 WAYFORPAY
+      if (payment === 'card') {
+        const formEl = document.createElement('form');
+        formEl.method = 'POST';
+        formEl.action = 'https://secure.wayforpay.com/pay';
+
+        const data = {
+          merchantAccount: process.env.NEXT_PUBLIC_WAYFORPAY_MERCHANT!,
+          merchantDomainName: window.location.hostname,
+          orderReference: String(orderId),
+          orderDate: Math.floor(Date.now() / 1000),
+          amount: String(subtotal),
+          currency: 'UAH',
+          productName: items.map((i) => i.name),
+          productCount: items.map(() => '1'),
+          productPrice: items.map((i) => String(i.price)),
+          returnUrl: `${window.location.origin}/${locale}/checkout/success?order=${orderId}`,
+          serviceUrl: `${window.location.origin}/api/payment-callback`,
+        };
+
+        Object.entries(data).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            value.forEach((v) => {
+              const input = document.createElement('input');
+              input.name = `${key}[]`;
+              input.value = v;
+              formEl.appendChild(input);
+            });
+          } else {
+            const input = document.createElement('input');
+            input.name = key;
+            input.value = value as string;
+            formEl.appendChild(input);
+          }
+        });
+
+        document.body.appendChild(formEl);
+        formEl.submit();
+        return;
+      }
+    } catch (error) {
+      console.error(error);
       router.push(`/${locale}/checkout/error`);
+    } finally {
+      setIsPlacingOrder(false);
     }
   };
 
@@ -100,8 +140,6 @@ export default function CheckoutPage() {
           setDelivery={setDelivery}
           payment={payment}
           setPayment={setPayment}
-          agree={agree}
-          setAgree={setAgree}
         />
 
         <OrderSummary
@@ -109,6 +147,7 @@ export default function CheckoutPage() {
           subtotal={subtotal}
           onSubmit={placeOrder}
           isLoading={isPlacingOrder}
+          isDisabled={!isFormValid}
         />
       </div>
     </main>

@@ -10,41 +10,67 @@ export default function PaymentSection({
   if (!deliveryCountry) return null;
 
   return (
-    <>
-      <h2 className="uppercase text-xl mt-6">{t('payment')}</h2>
+    <div className="space-y-6 mt-8">
+      <h2 className="uppercase text-xl font-semibold">{t('payment')}:</h2>
 
-      <label className="flex gap-2">
+      {/* 💳 Card (WayForPay) */}
+      <label className="flex items-center gap-3 cursor-pointer">
         <input
           type="radio"
+          className="w-5 h-5 accent-black"
           checked={payment === 'card'}
           onChange={() => setPayment('card')}
         />
-        {t('card')}
+        <span className="text-lg">{t('card')}</span>
       </label>
 
       {payment === 'card' && (
-        <p className="pl-6 text-sm text-gray-500">{t('cardDescription')}</p>
+        <div className="pl-8">
+          <p className="text-gray-500 text-base">
+            {t('cardRedirectDescription')}
+          </p>
+        </div>
       )}
 
+      {/* 🚚 COD (only UA) */}
       {deliveryCountry === 'ua' && (
-        <label className="flex gap-2 mt-2">
-          <input
-            type="radio"
-            checked={payment === 'cod'}
-            onChange={() => setPayment('cod')}
-          />
-          {t('cod')} (UA)
-        </label>
+        <>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="radio"
+              className="w-5 h-5 accent-black"
+              checked={payment === 'cod'}
+              onChange={() => setPayment('cod')}
+            />
+            <span className="text-lg">
+              {t('cod')} ({t('onlyUkraine')})
+            </span>
+          </label>
+
+          {payment === 'cod' && (
+            <div className="pl-8">
+              <p className="text-gray-500 text-base">{t('codDescription')}</p>
+            </div>
+          )}
+        </>
       )}
 
-      <label className="flex gap-2 mt-2">
+      {/* 🌍 PayPal */}
+      <label className="flex items-center gap-3 cursor-pointer">
         <input
           type="radio"
+          className="w-5 h-5 accent-black"
           checked={payment === 'paypal'}
           onChange={() => setPayment('paypal')}
         />
-        {t('paypal')}
+        <span className="text-lg">PayPal</span>
       </label>
-    </>
+
+      {payment === 'paypal' && (
+        <div className="pl-8">
+          <p className="text-gray-500 text-base">{t('paypalDescription')}</p>
+        </div>
+      )}
+    </div>
   );
 }

@@ -108,43 +108,49 @@
   "loading": "Loading..."
 },
 "checkout": {
-    "title": "Checkout",
+  "title": "Checkout",
 
-    "delivery": "Delivery",
-    "payment": "Payment",
+  "delivery": "Delivery",
+  "payment": "Payment",
 
-    "ua": "Ukraine",
-    "deliveryDescriptionUA": "Delivery is provided by Nova Poshta",
-    "world": "Worldwide",
+  "ua": "Ukraine",
+  "deliveryDescriptionUA": "Delivery is provided by Nova Poshta",
+  "world": "Worldwide",
 
-    "card": "Card",
-    "cardDescription": "After placing the order, you will be redirected to payment",
-    "cod": "Cash on delivery",
-    "paypal": "PayPal",
+  "card": "Credit card",
+  "cardRedirectDescription": "After placing the order, you will be redirected to the payment page.",
 
-    "agree": "I agree with terms",
+  "cod": "Cash on delivery",
+  "codDescription": "After placing the order, your order will be accepted.",
 
-    "placeholders": {
-      "name": "Name",
-      "email": "Email",
-      "phone": "Phone",
-      "country": "Country",
-      "address": "Address",
-      "postalCode": "Postal code"
-    },
+  "paypal": "PayPal",
+  "paypalDescription": "After placing the order, you will be redirected to PayPal for payment.",
 
-    "validation": {
-      "required": "Fill required fields",
-      "delivery": "Select delivery",
-      "payment": "Select payment",
-      "agree": "You must agree with terms"
-    },
+  "onlyUkraine": "Ukraine only",
 
-    "total": "Total",
-    "placeOrder": "Place order",
-    "processing": "Processing...",
-    "currency": "UAH"
+  "agree": "I agree with the terms",
+
+  "placeholders": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "country": "Country",
+    "address": "Address",
+    "postalCode": "Enter postal code or Nova Poshta branch"
   },
+
+  "validation": {
+    "required": "Fill required fields",
+    "delivery": "Select delivery",
+    "payment": "Select payment",
+    "agree": "You must agree with terms"
+  },
+
+  "total": "Total",
+  "placeOrder": "Place order",
+  "processing": "Processing...",
+  "currency": "UAH"
+},
 
   "success": {
     "title": "Order successful",

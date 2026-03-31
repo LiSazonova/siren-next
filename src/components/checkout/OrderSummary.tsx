@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useCart } from '@/stores/cart';
@@ -7,6 +9,7 @@ export default function OrderSummary({
   subtotal,
   onSubmit,
   isLoading,
+  isDisabled,
 }: any) {
   const t = useTranslations('checkout');
 
@@ -14,46 +17,69 @@ export default function OrderSummary({
   const setQty = useCart((s) => s.setQty);
 
   return (
-    <div className="border-l pl-6">
+    <div className="border-l pl-6 flex flex-col gap-6">
       {items.map((it: any) => (
-        <div key={it.key} className="flex justify-between py-6 border-b">
-          <div>
-            <h3>{it.name}</h3>
-            <Image src={it.image} alt={it.name} width={180} height={240} />
+        <div key={it.key} className="flex justify-between py-6 border-b gap-4">
+          {/* LEFT */}
+          <div className="flex flex-col gap-2">
+            <h3 className="text-lg">{it.name}</h3>
+
+            <Image
+              src={it.image}
+              alt={it.name}
+              width={180}
+              height={240}
+              className="object-cover"
+            />
           </div>
 
+          {/* RIGHT */}
           <div className="flex flex-col items-end gap-3">
-            <button onClick={() => removeItem(it.key)}>✕</button>
+            <button
+              onClick={() => removeItem(it.key)}
+              className="text-gray-500 hover:text-black"
+            >
+              ✕
+            </button>
 
             <select
               value={it.qty}
               onChange={(e) => setQty(it.key, Number(e.target.value))}
+              className="border p-2"
             >
               {[1, 2, 3].map((n) => (
-                <option key={n}>{n}</option>
+                <option key={n} value={n}>
+                  {n}
+                </option>
               ))}
             </select>
 
-            <p>
+            <p className="text-lg">
               {it.price * it.qty} {t('currency')}
             </p>
           </div>
         </div>
       ))}
 
-      <div className="flex justify-between mt-6 text-xl">
+      {/* TOTAL */}
+      <div className="flex justify-between text-xl mt-4">
         <span>{t('total')}</span>
         <span>
           {subtotal} {t('currency')}
         </span>
       </div>
 
+      {/* BUTTON */}
       <button
         onClick={onSubmit}
-        disabled={isLoading}
-        className="w-full mt-6 py-4 bg-black text-white"
+        disabled={isDisabled || isLoading}
+        className={`w-full p-4 text-lg transition ${
+          isDisabled
+            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            : 'bg-black text-white hover:opacity-90'
+        }`}
       >
-        {isLoading ? 'Processing...' : t('placeOrder')}
+        {isLoading ? t('processing') : t('placeOrder')}
       </button>
     </div>
   );
