@@ -2,6 +2,19 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+function getPaymentLabel(method: string) {
+  switch (method) {
+    case "cod":
+      return "Післяплата";
+    case "paypal":
+      return "PayPal";
+    case "card":
+      return "Оплата карткою";
+    default:
+      return method;
+  }
+}
+
 export async function sendOrderEmail(order: any) {
   try {
     const {
@@ -60,7 +73,7 @@ export async function sendOrderEmail(order: any) {
     <p>Індекс: ${customer?.postalCode || "-"}</p>
 
     <h3 style="margin-top:30px">Оплата</h3>
-    <p>${paymentMethod || "-"}</p>
+    <p>${getPaymentLabel(paymentMethod) || "-"}</p>
 
     <h3 style="margin-top:30px">Товари</h3>
 

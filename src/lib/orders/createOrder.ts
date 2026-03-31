@@ -34,7 +34,7 @@ export async function createOrder({
   const orderNumber = await getNextOrderNumber();
 
   const order = {
-    id: String(orderNumber), // удобно для фронта
+    id: String(orderNumber),
 
     orderNumber,
     customer,
@@ -52,7 +52,21 @@ export async function createOrder({
     createdAt: serverTimestamp(),
   };
 
+  // ✅ сохраняем заказ
   await setDoc(doc(db, "orders", String(orderNumber)), order);
+
+  // 🔥 ВАЖНО — вызываем API (email + telegram)
+  try {
+    await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/send-order`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(order),
+    });
+  } catch (error) {
+    console.error('SEND ORDER API ERROR:', error);
+  }
 
   return orderNumber;
 }
