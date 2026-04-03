@@ -8,15 +8,16 @@ export async function POST(req: Request) {
   const secret = process.env.WAYFORPAY_SECRET!;
 
   const locale = body.locale || 'en';
-  const orderReference = body.orderNumber;
+  const orderReference = String(body.orderNumber);
   const orderDate = Math.floor(Date.now() / 1000);
-  const amount = body.amount;
-  const currency = 'UAH';
+  const amount = Number(body.amount);
+  const currency = 'UAH'; // ✅ ВАЖНО
 
   const productName = body.productName;
-  const productCount = body.productCount;
-  const productPrice = body.productPrice;
+  const productCount = body.productCount.map((c: any) => Number(c));
+  const productPrice = body.productPrice.map((p: any) => Number(p));
 
+  // ✅ ПОДПИСЬ
   const signatureString = [
     merchantAccount,
     orderReference,
@@ -32,6 +33,10 @@ export async function POST(req: Request) {
     .createHmac('md5', secret)
     .update(signatureString)
     .digest('hex');
+
+  // 🔥 ЛОГИ (оставь пока!)
+  console.log('SIGN STRING:', signatureString);
+  console.log('SIGN:', merchantSignature);
 
   const responseData = {
     merchantAccount,
