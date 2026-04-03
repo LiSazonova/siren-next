@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   const merchantAccount = process.env.WAYFORPAY_MERCHANT!;
   const secret = process.env.WAYFORPAY_SECRET!;
 
-  const locale = body.locale;
+  const locale = body.locale || 'en';
   const orderReference = body.orderNumber;
   const orderDate = Math.floor(Date.now() / 1000);
   const amount = body.amount;
@@ -18,16 +18,15 @@ export async function POST(req: Request) {
   const productPrice = body.productPrice;
 
   const signatureString = [
-  merchantAccount,
-  'siren-serena.com',
-  orderReference,
-  orderDate,
-  amount,
-  currency,
-  ...productName,
-  ...productCount,
-  ...productPrice,
-].join(';');
+    merchantAccount,
+    orderReference,
+    orderDate,
+    amount,
+    currency,
+    ...productName,
+    ...productCount,
+    ...productPrice,
+  ].join(';');
 
   const merchantSignature = crypto
     .createHmac('md5', secret)

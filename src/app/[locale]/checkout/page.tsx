@@ -90,6 +90,7 @@ export default function CheckoutPage() {
             productName: items.map((i) => i.name),
             productCount: items.map(() => '1'),
             productPrice: items.map((i) => String(i.price)),
+            locale,
           }),
         });
 
