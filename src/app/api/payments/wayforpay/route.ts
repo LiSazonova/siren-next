@@ -17,16 +17,16 @@ export async function POST(req: Request) {
   const productPrice = body.productPrice;
 
   const signatureString = [
-    merchantAccount,
-    'https://siren-serena.com/api/payments/wayforpay/callback',
-    orderReference,
-    orderDate,
-    amount,
-    currency,
-    ...productName,
-    ...productCount,
-    ...productPrice,
-  ].join(';');
+  merchantAccount,
+  'siren-serena.com',
+  orderReference,
+  orderDate,
+  amount,
+  currency,
+  ...productName,
+  ...productCount,
+  ...productPrice,
+].join(';');
 
   const merchantSignature = crypto
     .createHmac('md5', secret)
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     productCount,
     productPrice,
     merchantSignature,
-    returnUrl: `https://siren-serena.com/checkout/success?order=${orderReference}`,
+    returnUrl: `https://siren-serena.com/en/checkout/success?order=${orderReference}`,
     serviceUrl: `https://siren-serena.com/api/payments/wayforpay/callback`,
   };
 
