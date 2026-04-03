@@ -4,6 +4,7 @@ import crypto from 'crypto';
 export async function POST(req: Request) {
   const body = await req.json();
 
+    const merchantDomainName = 'siren-serena.com';
   const merchantAccount = process.env.WAYFORPAY_MERCHANT!;
   const secret = process.env.WAYFORPAY_SECRET!;
 
@@ -19,15 +20,16 @@ export async function POST(req: Request) {
 
   // ✅ ПОДПИСЬ
   const signatureString = [
-    merchantAccount,
-    orderReference,
-    orderDate,
-    amount,
-    currency,
-    ...productName,
-    ...productCount,
-    ...productPrice,
-  ].join(';');
+  merchantAccount,
+  merchantDomainName, // 🔥 ВЕРНУТЬ
+  orderReference,
+  orderDate,
+  amount,
+  currency,
+  ...productName,
+  ...productCount,
+  ...productPrice,
+].join(';');
 
   const merchantSignature = crypto
     .createHmac('md5', secret)
