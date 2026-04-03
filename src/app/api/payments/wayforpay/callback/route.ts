@@ -6,6 +6,9 @@ import { db } from '@/lib/firebase/client';
 export async function POST(req: Request) {
   const data = await req.json();
 
+  console.log('🔥 WAYFORPAY CALLBACK HIT');
+  console.log('📦 DATA:', JSON.stringify(data, null, 2));
+
   const {
     orderReference,
     transactionStatus,
@@ -30,8 +33,12 @@ export async function POST(req: Request) {
     .update(signatureString)
     .digest('hex');
 
+  console.log('🔐 SIGNATURE STRING:', signatureString);
+  console.log('🔐 GENERATED:', checkSignature);
+  console.log('🔐 RECEIVED:', merchantSignature);
+
   if (checkSignature !== merchantSignature) {
-    console.error('INVALID SIGNATURE');
+    console.error('❌ INVALID SIGNATURE');
     return NextResponse.json({ status: 'error' });
   }
 
@@ -43,6 +50,8 @@ export async function POST(req: Request) {
     paymentStatus: isPaid ? 'paid' : 'failed',
     status: isPaid ? 'processing' : 'cancelled',
   });
+
+  console.log('✅ ORDER UPDATED:', orderReference);
 
   return NextResponse.json({
     orderReference,

@@ -17,9 +17,9 @@ export default async function SuccessPage({ params, searchParams }: any) {
     redirect(`/${locale}/checkout/error`);
   }
 
-  if (orderData.paymentStatus !== 'paid') {
-    redirect(`/${locale}/checkout/error`);
-  }
+  // if (orderData.paymentStatus !== 'paid') {
+  //   redirect(`/${locale}/checkout/error`);
+  // }
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
