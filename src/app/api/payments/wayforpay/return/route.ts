@@ -6,6 +6,6 @@ export async function POST(req: Request) {
   const order = formData.get('orderReference');
 
   return NextResponse.redirect(
-    `/en/checkout/success?order=${order}`
+    `https://siren-serena.com/en/checkout/success?order=${order}`
   );
 }

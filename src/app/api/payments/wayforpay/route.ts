@@ -51,7 +51,7 @@ export async function POST(req: Request) {
     productCount,
     productPrice,
     merchantSignature,
-    returnUrl: `https://siren-serena.com/${locale}/checkout/success?order=${orderReference}`,
+    returnUrl: 'https://siren-serena.com/api/payments/wayforpay/return',
     serviceUrl: `https://siren-serena.com/api/payments/wayforpay/callback`,
   };
 
