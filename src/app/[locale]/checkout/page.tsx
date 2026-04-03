@@ -38,7 +38,6 @@ export default function CheckoutPage() {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  // ✅ ВАЛИДАЦИЯ
   const isFormValid =
     form.name &&
     form.email &&
@@ -49,7 +48,6 @@ export default function CheckoutPage() {
     payment &&
     (deliveryCountry === 'ua' ? form.postalCode : true);
 
-  // 🚀 SUBMIT
   const placeOrder = async () => {
     if (isPlacingOrder || !isFormValid) return;
 
@@ -79,25 +77,27 @@ export default function CheckoutPage() {
         return;
       }
 
-      // 💳 WAYFORPAY
+      // 💳 WAYFORPAY (ИСПРАВЛЕНО)
       if (payment === 'card') {
+        const res = await fetch('/api/payments/wayforpay', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            orderNumber: orderId,
+            amount: subtotal,
+            productName: items.map((i) => i.name),
+            productCount: items.map(() => '1'),
+            productPrice: items.map((i) => String(i.price)),
+          }),
+        });
+
+        const data = await res.json();
+
         const formEl = document.createElement('form');
         formEl.method = 'POST';
         formEl.action = 'https://secure.wayforpay.com/pay';
-
-        const data = {
-          merchantAccount: process.env.NEXT_PUBLIC_WAYFORPAY_MERCHANT!,
-          merchantDomainName: window.location.hostname,
-          orderReference: String(orderId),
-          orderDate: Math.floor(Date.now() / 1000),
-          amount: String(subtotal),
-          currency: 'UAH',
-          productName: items.map((i) => i.name),
-          productCount: items.map(() => '1'),
-          productPrice: items.map((i) => String(i.price)),
-          returnUrl: `${window.location.origin}/${locale}/checkout/success?order=${orderId}`,
-          serviceUrl: `${window.location.origin}/api/payment-callback`,
-        };
 
         Object.entries(data).forEach(([key, value]) => {
           if (Array.isArray(value)) {
@@ -110,7 +110,7 @@ export default function CheckoutPage() {
           } else {
             const input = document.createElement('input');
             input.name = key;
-            input.value = value as string;
+            input.value = String(value);
             formEl.appendChild(input);
           }
         });
