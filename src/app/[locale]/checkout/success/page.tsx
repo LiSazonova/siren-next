@@ -3,9 +3,15 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import SuccessClient from './SuccessClient';
 
-export default async function SuccessPage({ params, searchParams }: any) {
-  const locale = params?.locale;
-  const orderId = searchParams?.order;
+export default async function SuccessPage({
+  params,
+  searchParams,
+}: {
+  params: { locale: string };
+  searchParams: { order?: string };
+}) {
+  const locale = params.locale;
+  const orderId = searchParams.order;
 
   if (!orderId) {
     redirect(`/${locale}/checkout/error`);
