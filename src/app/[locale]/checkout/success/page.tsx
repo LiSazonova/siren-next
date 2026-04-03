@@ -1,5 +1,4 @@
 import { getOrderById } from '@/lib/orders/getOrderById';
-import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import SuccessClient from './SuccessClient';
 
@@ -8,18 +7,14 @@ export default async function SuccessPage({ params, searchParams }: any) {
   const orderId = searchParams?.order;
 
   if (!orderId) {
-    redirect(`/${locale}/checkout/error`);
+    return <div className="text-center py-20">No order ID</div>;
   }
 
   const orderData = await getOrderById(orderId);
 
   if (!orderData) {
-    redirect(`/${locale}/checkout/error`);
+    return <div className="text-center py-20">Order not found</div>;
   }
-
-  // if (orderData.paymentStatus !== 'paid') {
-  //   redirect(`/${locale}/checkout/error`);
-  // }
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

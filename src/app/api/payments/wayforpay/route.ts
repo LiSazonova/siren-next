@@ -7,6 +7,7 @@ export async function POST(req: Request) {
   const merchantAccount = process.env.WAYFORPAY_MERCHANT!;
   const secret = process.env.WAYFORPAY_SECRET!;
 
+  const locale = body.locale;
   const orderReference = body.orderNumber;
   const orderDate = Math.floor(Date.now() / 1000);
   const amount = body.amount;
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
     productCount,
     productPrice,
     merchantSignature,
-    returnUrl: `https://siren-serena.com/en/checkout/success?order=${orderReference}`,
+    returnUrl: `https://siren-serena.com/${locale}/checkout/success?order=${orderReference}`,
     serviceUrl: `https://siren-serena.com/api/payments/wayforpay/callback`,
   };
 
