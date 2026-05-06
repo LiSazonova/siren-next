@@ -12,9 +12,14 @@ const SearchBar = ({ onClose }: { onClose?: () => void }) => {
   const [query, setQuery] = useState('');
 
   const handleSearch = () => {
-    router.push(`/${locale}/not-found`);
+    if (!query.trim()) return;
+    router.push(`/${locale}/search?q=${encodeURIComponent(query.trim())}`);
     setQuery('');
     if (onClose) onClose();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') handleSearch();
   };
 
   return (
@@ -25,13 +30,14 @@ const SearchBar = ({ onClose }: { onClose?: () => void }) => {
         className="flex-grow outline-none text-base placeholder-gray"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
       <Icon
         name="search_grey"
         alt="Search"
         width={25}
         height={24}
-        className="ml-2"
+        className="ml-2 cursor-pointer"
         onClick={handleSearch}
       />
     </div>
@@ -39,6 +45,3 @@ const SearchBar = ({ onClose }: { onClose?: () => void }) => {
 };
 
 export default SearchBar;
-
-// очистка строки поиска после нажатия на иконку поиска
-// поиск по всему сайту по имени платья или коллекции

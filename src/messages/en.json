@@ -12,9 +12,11 @@
     "logout": "Sign out"
   },
   "Search": {
-    "placeholder": "Search",
-    "noResults": "Nothing found"
-  },
+  "placeholder": "Search",
+  "title": "Search results",
+  "loading": "Loading...",
+  "noResults": "Nothing found"
+},
   "Hero": {
     "new": "new",
     "collection": "COLLECTION",

@@ -12,9 +12,11 @@
     "logout": "Вийти"
   },
   "Search": {
-    "placeholder": "Пошук",
-    "noResults": "Нічого не знайдено"
-  },
+  "placeholder": "Пошук",
+  "title": "Результати пошуку",
+  "loading": "Завантаження...",
+  "noResults": "Нічого не знайдено"
+},
   "Hero": {
     "new": "нова",
     "collection": "КОЛЕКЦІЯ",
