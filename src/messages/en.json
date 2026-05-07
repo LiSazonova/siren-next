@@ -13,9 +13,15 @@
   },
   "Search": {
   "placeholder": "Search",
-  "title": "Search results",
+  "title": "Search",
   "loading": "Loading...",
-  "noResults": "Nothing found"
+  "notFound": "NOT FOUND",
+  "searchedFor": "Searched for",
+  "tryDifferent": "Try different keywords or browse our collections",
+  "resultsFor": "Results for",
+  "result": "result",
+  "results": "results",
+  "enterQuery": "Enter a search query"
 },
   "Hero": {
     "new": "new",
