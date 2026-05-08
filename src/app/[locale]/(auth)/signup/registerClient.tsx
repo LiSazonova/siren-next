@@ -90,7 +90,7 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
         {/* Декорація */}
         <div className="w-[175px] h-[290px] md:w-[350px] md:h-[583px]">
           <Image
-            src="/images/decorations/registr_siren.svg"
+            src="/Images/decorations/registr_siren.svg"
             width={583}
             height={583}
             alt="Registration Decoration"

@@ -74,7 +74,7 @@ export default function ForgotPasswordPage() {
           {/* Мермайд */}
           <div className="max-w-[290px] md:max-w-[583px]">
             <Image
-              src="/images/decorations/siren_3.svg"
+              src="/Images/decorations/siren_3.svg"
               width={583}
               height={321}
               alt="Mermaid"
@@ -101,7 +101,7 @@ export default function ForgotPasswordPage() {
         {/* Мермайд */}
         <div className="w-[175px] h-[290px] md:w-[350px] md:h-[583px]">
           <Image
-            src="/images/decorations/siren_3.svg"
+            src="/Images/decorations/siren_3.svg"
             width={583}
             height={583}
             alt="Mermaid"

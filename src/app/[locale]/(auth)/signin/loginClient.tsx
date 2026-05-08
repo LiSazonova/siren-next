@@ -81,7 +81,7 @@ export default function LoginClient({ returnUrl = '' }: Props) {
         {/* Декор */}
         <div className="max-w-[290px] md:max-w-[583px]">
           <Image
-            src="/images/decorations/login_siren.svg"
+            src="/Images/decorations/login_siren.svg"
             width={583}
             height={321}
             alt="Login Decoration"
