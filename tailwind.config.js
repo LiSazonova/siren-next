@@ -21,10 +21,10 @@ module.exports = {
                 mobile: "320px",
             },
             fontFamily: {
-                lobster: ["Lobster", "cursive"],
-                inter: ["Inter", "sans-serif"],
-                lora: ["Lora", "serif"],
-                kaushan: ["Kaushan Script", "cursive"],
+                lobster: ["var(--font-lobster)", "cursive"],
+                inter: ["var(--font-inter)", "sans-serif"],
+                lora: ["var(--font-lora)", "serif"],
+                kaushan: ["var(--font-kaushan)", "cursive"],
             },
             keyframes: {
                 sizeUp: {

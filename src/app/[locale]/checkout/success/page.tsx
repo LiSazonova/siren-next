@@ -3,8 +3,8 @@ import { Suspense } from 'react';
 import SuccessClient from './SuccessClient';
 
 export default async function SuccessPage({ params, searchParams }: any) {
-  const locale = params?.locale;
-  const orderId = searchParams?.order;
+  const locale = (await params)?.locale;
+  const orderId = (await searchParams)?.order;
 
   if (!orderId) {
     return <div className="text-center py-20">No order ID</div>;

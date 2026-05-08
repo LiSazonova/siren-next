@@ -161,18 +161,12 @@
 },
 
   "success": {
-    "title": "Order successful",
-    "orderNumber": "Order number",
-    "paymentStatus": "Payment status",
-    "orderStatus": "Order status",
-    "text": "Thank you for your purchase. We are processing your order and will send confirmation via email.",
-    "continue": "Continue shopping"
-  },
+  "title": "Order successful, wait for delivery",
+  "text": "Thank you for your purchase. We are processing your order and will send confirmation via email."
+},
 
   "error": {
     "title": "Something went wrong",
-    "text": "Unfortunately, we couldn't process your order. Please try again or contact us.",
-    "retry": "Try again",
-    "home": "Go home"
+    "retry": "Try again"
   }
 }
