@@ -12,9 +12,11 @@ export default function ErrorPage() {
     <main className="min-h-screen bg-black font-lora text-white flex items-center justify-center px-6 py-12">
       <div className="max-w-5xl w-full flex flex-col-reverse md:flex-row items-center gap-8 md:gap-12">
         <div className="flex-1 flex justify-center">
-          <img
-            src="/images/decorations/login_siren.svg"
-            alt="Siren decoration"
+          <Image
+            src="/Images/decorations/login_siren.svg"
+            alt="Siren"
+            width={184}
+            height={253}
             className="w-full h-auto max-w-[280px] md:max-w-[500px] opacity-80"
           />
         </div>
