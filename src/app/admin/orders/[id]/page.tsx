@@ -1,6 +1,8 @@
 import OrderStatus from '@/components/admin/OrderStatus';
 import { getOrderById } from '@/lib/orders/getOrderById';
 
+export const dynamic = 'force-dynamic';
+
 interface Props {
   params: Promise<{ id: string }>;
 }
