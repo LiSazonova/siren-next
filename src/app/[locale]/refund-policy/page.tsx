@@ -1,5 +1,6 @@
 import React, { use } from 'react';
 import { useTranslations } from 'next-intl';
+import { setRequestLocale } from 'next-intl/server';
 import { EMAIL } from '@/lib/constants/contact';
 
 type Props = {
