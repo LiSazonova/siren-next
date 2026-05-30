@@ -14,10 +14,11 @@ export default function ErrorPage() {
         <div className="flex-1 flex justify-center">
           <Image
             src="/Images/decorations/login_siren.svg"
-            alt="Siren"
-            width={184}
-            height={253}
-            className="w-full h-auto max-w-[280px] md:max-w-[500px] opacity-80"
+            width={583}
+            height={321}
+            alt="Siren decoration"
+            className="w-full h-auto max-w-[280px] md:max-w-[583px]"
+            priority
           />
         </div>
 

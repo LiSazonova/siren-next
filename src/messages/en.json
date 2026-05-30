@@ -12,17 +12,17 @@
     "logout": "Sign out"
   },
   "Search": {
-  "placeholder": "Search",
-  "title": "Search",
-  "loading": "Loading...",
-  "notFound": "NOT FOUND",
-  "searchedFor": "Searched for",
-  "tryDifferent": "Try different keywords or browse our collections",
-  "resultsFor": "Results for",
-  "result": "result",
-  "results": "results",
-  "enterQuery": "Enter a search query"
-},
+    "placeholder": "Search",
+    "title": "Search",
+    "loading": "Loading...",
+    "notFound": "NOT FOUND",
+    "searchedFor": "Searched for",
+    "tryDifferent": "Try different keywords or browse our collections",
+    "resultsFor": "Results for",
+    "result": "result",
+    "results": "results",
+    "enterQuery": "Enter a search query"
+  },
   "Hero": {
     "new": "new",
     "collection": "COLLECTION",
@@ -33,7 +33,8 @@
   "Navigation": {
     "home": "Home",
     "about": "About",
-    "collections": "Collections"
+    "collections": "Collections",
+    "contacts": "Contacts"
   },
   "NotFoundPage": {
     "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
@@ -65,108 +66,240 @@
     }
   },
   "cart": {
-  "emptyTitle": "Not found",
-  "toCollections": "To collections →",
-  "headers": { "name": "Name", "size": "Size", "qty": "Quantity", "price": "Price" },
-  "remove": "Remove item",
-  "total": "Order total",
-  "checkout": "Proceed to checkout",
-  "currency": "UAH"
+    "emptyTitle": "Not found",
+    "toCollections": "To collections →",
+    "headers": {
+      "name": "Name",
+      "size": "Size",
+      "qty": "Quantity",
+      "price": "Price"
+    },
+    "remove": "Remove item",
+    "total": "Order total",
+    "checkout": "Proceed to checkout",
+    "currency": "UAH"
   },
   "loginPage": {
-  "title": "Login",
-"labelEmail":"Please enter your email address",
-"labelPassword":"Please enter your password",
-"forgotPassword": "Forgot your password?",
-"loading": "Logining...",
-"signinButton": "SIGN IN",
-"googleButton": "Sign in with",
-"noProfile": "I DON'T HAVE AN ACCOUNT",
-"email": "Email",
-"password": "Password"
-},
-"registerPage": {
-  "title": "Registration",
-"username": "Please enter your name",
-"usernamePlaceholder": "Name",
-"email": "Please enter your email address",
-"emailPlaceholder": "Please enter your email address",
-"password": "Please enter your password",
-"passwordPlaceholder": "Password",
-"loading": "Registering...",
-"signupButton": "SIGN UP",
-"googleButton": "Sign up with",
-"haveProfile": "I ALREADY HAVE A PROFILE"
-},
-"forgotPassword": {
-  "title": "Forgot your password?",
-  "titleCheck": "Check your mail",
-  "labelEmail": "Please enter your email address",
-  "emailPlaceholder": "Email",
-  "sendButton": "SEND",
-  "loading": "Sending...", 
-  "sentMessage": "Password reset email sent to {email}",
-  "noProfile": "I DON'T HAVE AN ACCOUNT"
-},
-"toggleButtons": {
-  "login": "Login",
-  "register": "Register",
-  "logout": "Logout",
-  "hello": "Hello",
-  "loading": "Loading..."
-},
-"checkout": {
-  "title": "Checkout",
-
-  "delivery": "Delivery",
-  "payment": "Payment",
-
-  "ua": "Ukraine",
-  "deliveryDescriptionUA": "Delivery is provided by Nova Poshta",
-  "world": "Worldwide",
-
-  "card": "Credit card",
-  "cardRedirectDescription": "After placing the order, you will be redirected to the payment page.",
-
-  "cod": "Cash on delivery",
-  "codDescription": "After placing the order, your order will be accepted.",
-
-  "paypal": "PayPal",
-  "paypalDescription": "After placing the order, you will be redirected to PayPal for payment.",
-
-  "onlyUkraine": "Ukraine only",
-
-  "agree": "I agree with the terms",
-
-  "placeholders": {
-    "name": "Name",
+    "title": "Login",
+    "labelEmail": "Please enter your email address",
+    "labelPassword": "Please enter your password",
+    "forgotPassword": "Forgot your password?",
+    "loading": "Logining...",
+    "signinButton": "SIGN IN",
+    "googleButton": "Sign in with",
+    "noProfile": "I DON'T HAVE AN ACCOUNT",
     "email": "Email",
-    "phone": "Phone",
-    "country": "Country",
-    "address": "Address",
-    "postalCode": "Enter postal code or Nova Poshta branch"
+    "password": "Password"
   },
-
-  "validation": {
-    "required": "Fill required fields",
-    "delivery": "Select delivery",
-    "payment": "Select payment",
-    "agree": "You must agree with terms"
+  "registerPage": {
+    "title": "Registration",
+    "username": "Please enter your name",
+    "usernamePlaceholder": "Name",
+    "email": "Please enter your email address",
+    "emailPlaceholder": "Please enter your email address",
+    "password": "Please enter your password",
+    "passwordPlaceholder": "Password",
+    "loading": "Registering...",
+    "signupButton": "SIGN UP",
+    "googleButton": "Sign up with",
+    "haveProfile": "I ALREADY HAVE A PROFILE"
   },
-
-  "total": "Total",
-  "placeOrder": "Place order",
-  "processing": "Processing...",
-  "currency": "UAH"
-},
-
+  "forgotPassword": {
+    "title": "Forgot your password?",
+    "titleCheck": "Check your mail",
+    "labelEmail": "Please enter your email address",
+    "emailPlaceholder": "Email",
+    "sendButton": "SEND",
+    "loading": "Sending...",
+    "sentMessage": "Password reset email sent to {email}",
+    "noProfile": "I DON'T HAVE AN ACCOUNT"
+  },
+  "toggleButtons": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "hello": "Hello",
+    "loading": "Loading..."
+  },
+  "checkout": {
+    "title": "Checkout",
+    "delivery": "Delivery",
+    "payment": "Payment",
+    "ua": "Ukraine",
+    "deliveryDescriptionUA": "Delivery is provided by Nova Poshta",
+    "world": "Worldwide",
+    "card": "Credit card",
+    "cardRedirectDescription": "After placing the order, you will be redirected to the payment page.",
+    "cod": "Cash on delivery",
+    "codDescription": "After placing the order, your order will be accepted.",
+    "paypal": "PayPal",
+    "paypalDescription": "After placing the order, you will be redirected to PayPal for payment.",
+    "onlyUkraine": "Ukraine only",
+    "agree": "I agree with the terms",
+    "placeholders": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "country": "Country",
+      "address": "Address",
+      "postalCode": "Enter postal code or Nova Poshta branch"
+    },
+    "validation": {
+      "required": "Fill required fields",
+      "delivery": "Select delivery",
+      "payment": "Select payment",
+      "agree": "You must agree with terms"
+    },
+    "total": "Total",
+    "placeOrder": "Place order",
+    "processing": "Processing...",
+    "currency": "UAH"
+  },
   "success": {
-  "title": "Order successful, wait for delivery",
-  "text": "Thank you for your purchase. We are processing your order and will send confirmation via email."
-},
-
+    "title": "Order successful, wait for delivery",
+    "text": "Thank you for your purchase. We are processing your order and will send confirmation via email."
+  },
   "error": {
     "title": "Something went wrong",
     "retry": "Try again"
+  },
+  "Terms": {
+    "title": "Terms and Conditions",
+    "intro": "We ship orders throughout Ukraine (except temporarily occupied territories).",
+    "novaPoshta": {
+      "title": "1. Nova Poshta",
+      "description": "The fastest way to receive your order.",
+      "item1": "To a branch — according to carrier rates (from 70 UAH).",
+      "item2": "Courier address delivery — to your door anywhere in Ukraine.",
+      "item3": "Delivery time: 1–3 days from dispatch."
+    },
+    "ukrposhta": {
+      "title": "2. Ukrposhta (Express or Standard)",
+      "description": "A budget delivery option with the largest branch network.",
+      "item1": "To a branch — according to carrier rates (from 35–40 UAH).",
+      "item2": "Delivery time: 3–7 days depending on the selected rate and region from dispatch"
+    },
+    "shippingSchedule": {
+      "title": "⏰ Shipping Schedule & Timelines",
+      "item1": "Orders for in-stock items are shipped the same day.",
+      "item2": "Orders for out-of-stock items are shipped within 10-11 days",
+      "item3": "After dispatch you will automatically receive an SMS or messenger notification with the tracking number (TTN) for parcel tracking."
+    },
+    "payment": {
+      "title": "💳 Payment Methods",
+      "intro": "You can choose the most convenient payment method for you:",
+      "onlineTitle": "Online payment on the website (Monobank / LiqPay / WayForPay):",
+      "onlineContent": "Fast and secure payment by Visa or MasterCard, as well as via Apple Pay / Google Pay. No additional fees.",
+      "ibanTitle": "Payment by bank details (IBAN):",
+      "ibanContent": "After order confirmation, the manager will send you official payment details for use in your banking app (Privat24, Monobank, etc.).",
+      "codTitle": "Cash on delivery:",
+      "codContent": "Payment upon receipt at a Nova Poshta branch.",
+      "codNote": "Important: Nova Poshta charges a money transfer fee (20 UAH + 2% of the order amount).",
+      "prepayment": "The store reserves the right to request a prepayment of 200 UAH for bulky items or customers with a low reliability rating"
+    },
+    "receiving": {
+      "title": "🔍 Important upon receipt!",
+      "content": "Please be sure to check the integrity and completeness of the product directly at the delivery service branch or in the presence of the courier.",
+      "ifDamaged": "If you discover damage or a discrepancy with your order:",
+      "step1": "Do not accept the parcel.",
+      "step2": "Draw up a claim act together with the delivery service employee.",
+      "step3": "Take photos of the damage and contact our support team by phone: +380977099015"
+    },
+    "international": {
+      "title": "International Delivery",
+      "intro": "We are happy to ship our products worldwide! Below you will find detailed information regarding shipping methods, delivery times, and payment options for international orders.",
+      "methodsTitle": "🌍 Shipping Methods & Timelines",
+      "methodsIntro": "Shipping is carried out by reliable postal and courier services from Ukraine.",
+      "ukrposhtaTitle": "1. Ukrposhta (International Air Delivery)",
+      "ukrposhtaDescription": "The most cost-effective option for small and medium-sized parcels. Once it crosses the border, the parcel is handled by the state postal service of your country (e.g., USPS in the USA, Deutsche Post in Germany, Royal Mail in the UK, etc.).",
+      "ukrposhtaGeography": "📍 Geography: Worldwide (excluding the aggressor countries: the Russian Federation and the Republic of Belarus).",
+      "ukrposhtaDeliveryTitle": "⏰ Delivery Times:",
+      "ukrposhtaDelivery1": "Europe: 7–21 business days.",
+      "ukrposhtaDelivery2": "USA, Canada: 14–25 business days.",
+      "ukrposhtaDelivery3": "Rest of the world: 15–30 business days.",
+      "ukrposhtaCost": "💰 Shipping Cost: Calculated automatically at checkout based on the parcel's weight and destination country ($15 / €14).",
+      "novaPostTitle": "2. Nova Post (Global Delivery)",
+      "novaPostDescription": "The fastest and most convenient method for shipping to European countries where Nova Post branches are already operating, as well as for courier delivery in other regions.",
+      "novaPostGeography": "📍 Geography: EU countries (Poland, Germany, Czech Republic, Lithuania, etc.) — delivery to branches, parcel lockers, or by courier.",
+      "novaPostDelivery": "⏰ Delivery Times: 3–10 business days (significantly faster than standard mail).",
+      "novaPostCost": "💰 Shipping Cost: According to Nova Post rates (depends on dimensions and destination country).",
+      "expressTitle": "3. Express Delivery (DHL / FedEx / UPS)",
+      "expressDescription": "Available upon individual customer request.",
+      "expressDelivery": "⏰ Delivery Times: 2–5 business days to anywhere in the world.",
+      "expressCost": "💰 Shipping Cost: Calculated individually by our manager.",
+      "paymentTitle": "💳 Payment Methods",
+      "paymentContent1": "International orders are shipped exclusively on a 100% prepayment basis (including shipping costs). Cash on Delivery (COD) is not available for international shipments.",
+      "paymentContent2": "You can pay for your order in your preferred currency ($ USD, € EUR, ₴ UAH):",
+      "paymentOnlineTitle": "Online Payment on the Website:",
+      "paymentOnlineContent": "Via secure payment gateways (WayForPay, LiqPay, Mono-acquiring) using Visa / MasterCard, as well as Apple Pay and Google Pay.",
+      "customsTitle": "⚠️ Customs, Duties & Taxes",
+      "customsContent1": "Please Note! The shipping cost does not include customs duties, import taxes (such as VAT), or brokerage fees that may be charged by your country's customs office upon arrival.",
+      "customsContent2": "Each country has its own limits for duty-free import (for instance, in EU countries, VAT is charged from the first euro cent if the parcel is not sent via the IOSS system).",
+      "customsContent3": "All additional customs clearance fees are the sole responsibility of the buyer.",
+      "customsContent4": "Please familiarize yourself with your country's customs regulations prior to purchasing. If a parcel is returned due to the buyer's refusal to pay customs duties, the round-trip shipping cost will not be refunded.",
+      "trackingTitle": "📦 Order Tracking",
+      "trackingContentBefore": "Once your parcel is handed over to the logistics company, we will send you a Tracking Number via email or messenger. You can track your shipment on the carrier's website or using universal tracking services (e.g.,",
+      "trackingContentAfter": ").",
+      "returnsTitle": "🔄 Returns & Exchanges",
+      "returnsContent1": "In accordance with legislation, you can return an item within 14 days of receipt, provided it is unused and retains its original commercial appearance.",
+      "returnsContent2": "For international returns or exchanges, all return shipping costs are covered by the buyer, except in cases where the return is due to a manufacturing defect or an error on our part.",
+      "contactsTitle": "📞 Contact Us",
+      "contactsIntro": "If you have any questions regarding shipping to your country, please drop us a line, and we will find the best solution for you!",
+      "contactsEmail": "Email: Golovko.Vlada@gmail.com",
+      "contactsMessengers": "WhatsApp / Telegram / Viber: +380977099015",
+      "contactsInstagramLabel": "Instagram DM:"
+    },
+    "lastUpdated": "Last updated: May 2026",
+    "support": {
+      "intro": "If you have difficulties placing an order or need assistance, we are always here to help:",
+      "phone": "Phone: +380977099015",
+      "emailLabel": "Email:",
+      "schedule": "Support hours: Mon-Fri 09:00-18:00, Sat-Sun closed."
+    }
+  },
+  "RefundPolicy": {
+    "title": "Refund Policy",
+    "section1": {
+      "title": "🔄 Returns & Exchanges",
+      "content": "In accordance with legislation, you can return an item within 14 days of receipt, provided it is unused and retains its original commercial appearance."
+    },
+    "section2": {
+      "title": "International Orders",
+      "content": "For international returns or exchanges, all return shipping costs are covered by the buyer, except in cases where the return is due to a manufacturing defect or an error on our part."
+    },
+    "section3": {
+      "title": "How to Initiate a Return",
+      "content": "To process a return or exchange, please contact us within 14 days of receiving the goods.",
+      "step1": "Call +380977099015 or email Golovko.Vlada@gmail.com",
+      "step2": "Provide your order number and reason for return",
+      "step3": "Receive shipping instructions from the manager"
+    },
+    "contact": {
+      "title": "Contacts",
+      "content": "For return and exchange inquiries, please contact:",
+      "phone": "Phone",
+      "email": "Email"
+    },
+    "lastUpdated": "Last updated: May 2026"
+  },
+  "Contacts": {
+    "title": "Contacts",
+    "subtitle": "If you have difficulties placing an order or need assistance, we are always here to help:",
+    "channels": {
+      "phone": "Phone",
+      "whatsapp": "WhatsApp",
+      "telegram": "Telegram",
+      "viber": "Viber",
+      "email": "Email",
+      "instagram": "Instagram",
+      "schedule": "Working Hours"
+    },
+    "scheduleValue": "Mon-Fri 09:00-18:00, Sat-Sun closed",
+    "company": {
+      "title": "Company Information",
+      "name": "Full Name",
+      "inn": "Tax ID / EDRPOU",
+      "fullName": "IE HOLOVKO VLADLENA VIACHESLAVIVNA"
+    }
   }
 }

@@ -25,6 +25,7 @@ const NavigationLinks: React.FC<Props> = ({ onClick, variant = 'desktop' }) => {
     { href: `/${locale}`, label: t('home') },
     { href: `/${locale}/collections`, label: t('collections') },
     { href: `/${locale}/about`, label: t('about') },
+    { href: `/${locale}/contacts`, label: t('contacts') },
   ];
 
   return (

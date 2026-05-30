@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import SearchBar from '../SearchBar';
 import Icon from '../Icon';
 import CartIconBadge from '../CartIconBadge';
+import { INSTAGRAM_URL } from '@/lib/constants/contact';
 
 const MobileIcons = ({
   isSearchOpen,
@@ -48,7 +49,7 @@ const MobileIcons = ({
       </li>
       <li className="">
         <Link
-          href="https://www.instagram.com/__the_siren__official_/profilecard/?igsh=MTA5OWE4d3luaXA2eg=="
+          href={INSTAGRAM_URL}
           target="_blank"
           rel="noopener noreferrer"
         >
