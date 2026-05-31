@@ -1,4 +1,4 @@
-export const EMAIL = 'Golovko.Vlada@gmail.com';
+export const EMAIL = 'siren.serena.official@gmail.com';
 
 export const TELEGRAM_URL = 'https://t.me/vladlena_siren';
 
