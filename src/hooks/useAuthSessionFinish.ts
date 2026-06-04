@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { onAuthStateChanged, type User } from 'firebase/auth';
+import { type User } from 'firebase/auth';
 import { useLocale } from 'next-intl';
 import { auth } from '@/lib/firebase/client';
 import {
@@ -10,12 +10,12 @@ import {
   getAuthErrorCode,
   hardNavigate,
   isLocalDevHost,
-  resetRedirectResultCache,
   resolvePostLoginPath,
+  wasGoogleRedirectStarted,
 } from '@/lib/auth/firebaseAuth';
 
 /**
- * On sign-in/sign-up pages: finish Firebase OAuth redirect + create __session cookie.
+ * Finishes Firebase OAuth redirect (popup-blocked fallback) + creates __session cookie.
  */
 export function useAuthSessionFinish(enabled = true) {
   const locale = useLocale();
@@ -24,11 +24,8 @@ export function useAuthSessionFinish(enabled = true) {
   const finishing = useRef(false);
 
   useEffect(() => {
-    // On localhost popup flow is handled inside signInWithGoogle()
     if (!enabled || isLocalDevHost()) return;
 
-    resetRedirectResultCache();
-    finishing.current = false;
     let cancelled = false;
 
     const finishSession = async (user: User | null) => {
@@ -49,24 +46,34 @@ export function useAuthSessionFinish(enabled = true) {
         const code = getAuthErrorCode(err);
         if (code === 'auth/popup-closed-by-user') return;
         setError(
-          code === 'session-fail'
-            ? 'session-fail'
-            : 'google-failed',
+          code === 'session-fail' ? 'session-fail' : 'google-failed',
         );
       }
     };
 
-    const unsub = onAuthStateChanged(auth, finishSession);
-
     (async () => {
+      if (!wasGoogleRedirectStarted()) return;
+
+      setWorking(true);
+      setError(null);
+
       await completeFirebaseRedirect();
       await auth.authStateReady();
-      await finishSession(auth.currentUser);
+      if (cancelled) return;
+
+      const user = auth.currentUser;
+      if (user) {
+        await finishSession(user);
+        return;
+      }
+
+      finishing.current = false;
+      setWorking(false);
+      if (!cancelled) setError('google-failed');
     })();
 
     return () => {
       cancelled = true;
-      unsub();
     };
   }, [enabled, locale]);
 

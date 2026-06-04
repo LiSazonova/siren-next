@@ -14,6 +14,14 @@ export function resetRedirectResultCache() {
   redirectResultPromise = null;
 }
 
+export function wasGoogleRedirectStarted(): boolean {
+  if (typeof window === 'undefined') return false;
+  return (
+    sessionStorage.getItem(GOOGLE_REDIRECT_STARTED) === '1' ||
+    localStorage.getItem(GOOGLE_REDIRECT_STARTED) === '1'
+  );
+}
+
 let redirectResultPromise: Promise<void> | null = null;
 
 export function isLocalDevHost(): boolean {
@@ -66,6 +74,7 @@ export function isCheckoutReturnUrl(returnUrl: string): boolean {
 }
 
 export async function createSessionFromUser(): Promise<void> {
+  await auth.authStateReady();
   const idToken = await auth.currentUser?.getIdToken(true);
   if (!idToken) throw new Error('no-id-token');
 
@@ -81,7 +90,7 @@ export async function createSessionFromUser(): Promise<void> {
 
 /**
  * Google auth (login + registration — Firebase creates account if new).
- * Popup on localhost; full redirect on production.
+ * Popup first (reliable on custom domains); redirect if popup is blocked.
  */
 export async function signInWithGoogle(
   returnUrl: string,
@@ -90,15 +99,23 @@ export async function signInWithGoogle(
   const safePath = returnUrl.startsWith('/') ? returnUrl : `/${locale}`;
   storeGoogleReturnUrl(safePath);
 
-  if (isLocalDevHost()) {
+  try {
     await signInWithPopup(auth, googleProvider);
     await createSessionFromUser();
     clearGoogleReturnStorage();
     hardNavigate(safePath);
-    return;
+  } catch (err) {
+    const code = getAuthErrorCode(err);
+    if (code === 'auth/popup-closed-by-user') return;
+    if (
+      code === 'auth/popup-blocked' ||
+      code === 'auth/cancelled-popup-request'
+    ) {
+      await signInWithRedirect(auth, googleProvider);
+      return;
+    }
+    throw err;
   }
-
-  await signInWithRedirect(auth, googleProvider);
 }
 
 /** @deprecated use signInWithGoogle */

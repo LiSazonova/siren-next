@@ -46,6 +46,23 @@ export default function LoginClient({ returnUrl = '' }: Props) {
     hardNavigate(getSafeReturn());
   };
 
+  const mapLoginError = (err: unknown) => {
+    const code = getAuthErrorCode(err);
+    const msg = (err as Error)?.message ?? '';
+    if (
+      code === 'auth/invalid-credential' ||
+      code === 'auth/wrong-password' ||
+      code === 'auth/user-not-found' ||
+      code === 'auth/invalid-email'
+    ) {
+      return tErr('invalidCredentials');
+    }
+    if (msg.includes('session-fail') || msg.includes('no-id-token')) {
+      return tErr('sessionFailed');
+    }
+    return tErr('generic');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -54,19 +71,7 @@ export default function LoginClient({ returnUrl = '' }: Props) {
       await signInWithEmailAndPassword(auth, form.identifier, form.password);
       await finishLogin();
     } catch (err: unknown) {
-      const code = getAuthErrorCode(err);
-      if (
-        code === 'auth/invalid-credential' ||
-        code === 'auth/wrong-password' ||
-        code === 'auth/user-not-found' ||
-        code === 'auth/invalid-email'
-      ) {
-        setError(tErr('invalidCredentials'));
-      } else if ((err as Error)?.message?.includes('session-fail')) {
-        setError(tErr('sessionFailed'));
-      } else {
-        setError(tErr('generic'));
-      }
+      setError(mapLoginError(err));
     } finally {
       setLoading(false);
     }
