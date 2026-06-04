@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCartItems, useCartSubtotal, useCart } from '@/stores/cart';
 import { createOrder } from '@/lib/orders/createOrder';
 import { useLocale, useTranslations } from 'next-intl';
+import useAuthUser from '@/hooks/useAuthUser';
 
 import CheckoutForm from '@/components/checkout/CheckoutForm';
 import OrderSummary from '@/components/checkout/OrderSummary';
@@ -12,8 +14,14 @@ import CheckoutButton from '@/components/CheckoutButton';
 
 export default function CheckoutPage() {
   const t = useTranslations('checkout');
+  const tAuth = useTranslations('cart');
   const locale = useLocale();
   const router = useRouter();
+  const { user, loading: authLoading } = useAuthUser();
+
+  const checkoutReturn = encodeURIComponent(`/${locale}/checkout`);
+  const signInHref = `/${locale}/signin?returnUrl=${checkoutReturn}`;
+  const signUpHref = `/${locale}/signup?returnUrl=${checkoutReturn}`;
 
   const items = useCartItems();
   const subtotal = useCartSubtotal();
@@ -56,6 +64,11 @@ export default function CheckoutPage() {
 
   const placeOrder = async () => {
     if (isPlacingOrder || !isFormValid) return;
+
+    if (!user) {
+      router.push(signInHref);
+      return;
+    }
 
     setIsPlacingOrder(true);
 
@@ -104,9 +117,28 @@ export default function CheckoutPage() {
     }
   };
 
+  const needsAuth = !authLoading && !user;
+
   return (
     <main className="max-w-[1200px] mx-auto px-4 pb-16">
       <h1 className="text-center text-[28px] uppercase mb-8">{t('title')}</h1>
+
+      {needsAuth && (
+        <div
+          role="status"
+          className="mb-8 rounded border border-amber-600 bg-amber-50 px-4 py-4 text-[16px] md:text-[18px] text-neutral-900"
+        >
+          <p>{tAuth('authRequired')}</p>
+          <p className="mt-3 flex flex-wrap gap-4 uppercase text-[16px]">
+            <Link href={signInHref} className="underline hover:opacity-80">
+              {tAuth('signIn')}
+            </Link>
+            <Link href={signUpHref} className="underline hover:opacity-80">
+              {tAuth('signUp')}
+            </Link>
+          </p>
+        </div>
+      )}
 
       <div className="grid lg:grid-cols-[1fr_460px] gap-12">
         <CheckoutForm
@@ -124,7 +156,7 @@ export default function CheckoutPage() {
           subtotal={subtotal}
           onSubmit={placeOrder}
           isLoading={isPlacingOrder || !!liqPayCheckout}
-          isDisabled={!isFormValid}
+          isDisabled={!isFormValid || needsAuth}
         />
       </div>
 
