@@ -8,10 +8,17 @@ import { auth, googleProvider } from '@/lib/firebase/client';
 
 const GOOGLE_RETURN_KEY = 'auth.googleReturnUrl';
 
+let redirectResultPromise: Promise<User | null> | null = null;
+
 export function storeGoogleReturnUrl(url: string) {
   if (typeof window !== 'undefined') {
     sessionStorage.setItem(GOOGLE_RETURN_KEY, url);
   }
+}
+
+export function peekGoogleReturnUrl(): string | null {
+  if (typeof window === 'undefined') return null;
+  return sessionStorage.getItem(GOOGLE_RETURN_KEY);
 }
 
 export function consumeGoogleReturnUrl(): string | null {
@@ -19,6 +26,10 @@ export function consumeGoogleReturnUrl(): string | null {
   const value = sessionStorage.getItem(GOOGLE_RETURN_KEY);
   sessionStorage.removeItem(GOOGLE_RETURN_KEY);
   return value;
+}
+
+export function hasPendingGoogleSignIn(): boolean {
+  return !!peekGoogleReturnUrl();
 }
 
 export async function createSessionFromUser(): Promise<void> {
@@ -41,10 +52,31 @@ export async function startGoogleSignIn(returnUrl: string): Promise<void> {
   await signInWithRedirect(auth, googleProvider);
 }
 
-/** Call once after returning from Google OAuth redirect. */
+/**
+ * Resolves once after OAuth redirect. Cached so Strict Mode does not call twice.
+ */
+export async function resolveGoogleRedirectUser(): Promise<User | null> {
+  if (!redirectResultPromise) {
+    redirectResultPromise = (async () => {
+      await auth.authStateReady();
+      try {
+        const result = await getRedirectResult(auth);
+        if (result?.user) return result.user;
+      } catch {
+        // fall through to currentUser check
+      }
+      if (hasPendingGoogleSignIn() && auth.currentUser) {
+        return auth.currentUser;
+      }
+      return null;
+    })();
+  }
+  return redirectResultPromise;
+}
+
+/** @deprecated use resolveGoogleRedirectUser */
 export async function completeGoogleRedirectSignIn(): Promise<User | null> {
-  const result = await getRedirectResult(auth);
-  return result?.user ?? null;
+  return resolveGoogleRedirectUser();
 }
 
 export function getAuthErrorCode(err: unknown): string | undefined {

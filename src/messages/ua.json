@@ -91,7 +91,8 @@
     "userNotFound": "Користувача з таким email не знайдено.",
     "invalidEmail": "Невірний email.",
     "resetEmailFailed": "Не вдалося надіслати лист. Спробуйте пізніше.",
-    "resetUriNotAllowed": "Посилання для скидання не дозволене. Додайте домен у Firebase Console → Authentication → Settings."
+    "resetUriNotAllowed": "Посилання для скидання не дозволене. Додайте домен у Firebase Console → Authentication → Settings.",
+    "completingSignIn": "Завершуємо вхід…"
   },
   "loginPage": {
     "title": "Вхід",

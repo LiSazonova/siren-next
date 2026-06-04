@@ -1,16 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/firebase/client';
 import {
   createSessionFromUser,
   getAuthErrorCode,
+  hasPendingGoogleSignIn,
   startGoogleSignIn,
 } from '@/lib/auth/firebaseAuth';
+import { auth } from '@/lib/firebase/client';
 import GoogleSignInButton from '@/components/auth/GoogleSignInButton';
 import { useLocale, useTranslations } from 'next-intl';
 
@@ -35,9 +36,38 @@ export default function LoginClient({ returnUrl = '' }: Props) {
     return isAuth ? `/${locale}` : raw || `/${locale}`;
   };
 
+  const redirectAfterAuth = (path: string) => {
+    router.replace(path);
+    router.refresh();
+    // Fallback if client router does not navigate (seen after OAuth redirect)
+    setTimeout(() => {
+      if (window.location.pathname.includes('/signin')) {
+        window.location.assign(path);
+      }
+    }, 800);
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      await auth.authStateReady();
+      if (cancelled || hasPendingGoogleSignIn()) return;
+      if (!auth.currentUser) return;
+      try {
+        await createSessionFromUser();
+        redirectAfterAuth(getSafeReturn());
+      } catch {
+        /* session cookie not ready yet */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [locale, returnUrl]);
+
   const finishLogin = async () => {
     await createSessionFromUser();
-    router.push(getSafeReturn());
+    redirectAfterAuth(getSafeReturn());
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

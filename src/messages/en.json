@@ -91,7 +91,8 @@
     "userNotFound": "No account found with this email.",
     "invalidEmail": "Invalid email address.",
     "resetEmailFailed": "Could not send the email. Please try again later.",
-    "resetUriNotAllowed": "Reset link is not allowed. Add your domain in Firebase Console → Authentication → Settings."
+    "resetUriNotAllowed": "Reset link is not allowed. Add your domain in Firebase Console → Authentication → Settings.",
+    "completingSignIn": "Completing sign-in…"
   },
   "loginPage": {
     "title": "Login",
