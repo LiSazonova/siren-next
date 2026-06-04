@@ -250,7 +250,7 @@ export default function CartPage() {
       {/* Итоги */}
       <div className="mt-12 pt-6 border-t border-[#747474] flex flex-col gap-6">
         {!authLoading && !user && (
-          <div className="rounded border border-[#747474] bg-neutral-50 px-4 py-4 text-[16px] md:text-[18px] text-neutral-800">
+          <div className="rounded border border-amber-600 bg-amber-50 px-4 py-4 text-[16px] md:text-[18px] text-neutral-900">
             <p>{t('authRequired')}</p>
             <p className="mt-3 flex flex-wrap gap-4 uppercase text-[16px]">
               <Link href={signInHref} className="underline hover:opacity-80">
