@@ -1,7 +1,8 @@
 const nextIntl = require('next-intl/plugin')(
   {
-    locales: ['en', 'ua'],
-    defaultLocale: 'en',
+    locales: ['ua', 'en'],
+    defaultLocale: 'ua',
+    localeDetection: false,
     localePrefix: 'always'
   }
 );

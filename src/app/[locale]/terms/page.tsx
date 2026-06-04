@@ -24,6 +24,25 @@ export default function TermsPage({ params }: Props) {
       </div>
 
       <div className="space-y-8 text-[16px] leading-relaxed">
+        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <h2 className="font-lora text-[22px] uppercase text-black mb-3">
+            {t('seller.title')}
+          </h2>
+          <p>
+            <span className="font-semibold">{t('seller.name')}:</span>{' '}
+            {t('seller.fullName')}
+          </p>
+          <p>
+            <span className="font-semibold">{t('seller.inn')}:</span> 3669711966
+          </p>
+          <p>
+            <span className="font-semibold">{t('seller.email')}:</span>{' '}
+            <a href={`mailto:${EMAIL}`} className="hover:underline">
+              {EMAIL}
+            </a>
+          </p>
+        </div>
+
         <p>{t('intro')}</p>
 
         <div>

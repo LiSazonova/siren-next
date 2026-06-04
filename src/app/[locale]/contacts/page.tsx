@@ -145,6 +145,10 @@ export default function ContactsPage({ params }: Props) {
           <p>
             <span className="font-semibold">{t('company.inn')}:</span> 3669711966
           </p>
+          <p className="md:col-span-2">
+            <span className="font-semibold">{t('company.address')}:</span>{' '}
+            {t('company.legalAddress')}
+          </p>
         </div>
       </div>
     </section>

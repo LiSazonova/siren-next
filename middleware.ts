@@ -2,12 +2,9 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
 import { adminAuth } from '@/lib/firebase/admin';
+import { routing } from '@/i18n/routing';
 
-const intl = createIntlMiddleware({
-  locales: ['en', 'ua'],
-  defaultLocale: 'en',
-  localePrefix: 'always',
-});
+const intl = createIntlMiddleware(routing);
 
 export async function middleware(req: NextRequest) {
   // Сначала i18n (локализация путей/редиректы локали)
@@ -22,7 +19,7 @@ export async function middleware(req: NextRequest) {
 
   // Извлечь локаль из первого сегмента
   const [ , maybeLocale ] = pathname.split('/');
-  const locale = (maybeLocale === 'en' || maybeLocale === 'ua') ? maybeLocale : 'en';
+  const locale = (maybeLocale === 'en' || maybeLocale === 'ua') ? maybeLocale : 'ua';
 
   // Страницы авторизации — нельзя редиректить на себя же
   const isAuthPage =

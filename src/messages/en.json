@@ -184,6 +184,14 @@
   },
   "Terms": {
     "title": "Terms and Conditions",
+    "seller": {
+      "title": "Seller information",
+      "name": "Full name",
+      "inn": "Tax ID",
+      "address": "Legal address",
+      "email": "Email",
+      "fullName": "IE HOLOVKO VLADLENA VIACHESLAVIVNA"
+    },
     "intro": "We ship orders throughout Ukraine (except temporarily occupied territories).",
     "novaPoshta": {
       "title": "1. Nova Poshta",
@@ -318,6 +326,8 @@
       "title": "Company Information",
       "name": "Full Name",
       "inn": "Tax ID / EDRPOU",
+      "address": "Legal address",
+      "legalAddress": "7-8, 554 Hetmanska St., Dnipro, Dnipropetrovsk region, Ukraine",
       "fullName": "IE HOLOVKO VLADLENA VIACHESLAVIVNA"
     }
   }
