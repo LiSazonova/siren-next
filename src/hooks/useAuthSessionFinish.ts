@@ -5,6 +5,7 @@ import { type User } from 'firebase/auth';
 import { useLocale } from 'next-intl';
 import { auth } from '@/lib/firebase/client';
 import {
+  clearGoogleReturnStorage,
   completeFirebaseRedirect,
   createSessionFromUser,
   getAuthErrorCode,
@@ -67,9 +68,10 @@ export function useAuthSessionFinish(enabled = true) {
         return;
       }
 
+      // Stale or failed redirect — clear flag, no banner (user can click Google again)
+      clearGoogleReturnStorage();
       finishing.current = false;
       setWorking(false);
-      if (!cancelled) setError('google-failed');
     })();
 
     return () => {

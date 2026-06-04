@@ -34,8 +34,12 @@ export function storeGoogleReturnUrl(url: string) {
   if (typeof window === 'undefined') return;
   sessionStorage.setItem(GOOGLE_RETURN_KEY, url);
   localStorage.setItem(GOOGLE_RETURN_BACKUP_KEY, url);
+}
+
+/** Only before signInWithRedirect (not popup). */
+export function markGoogleRedirectStarted() {
+  if (typeof window === 'undefined') return;
   sessionStorage.setItem(GOOGLE_REDIRECT_STARTED, '1');
-  localStorage.setItem(GOOGLE_REDIRECT_STARTED, '1');
 }
 
 function peekGoogleReturnUrl(): string | null {
@@ -46,7 +50,7 @@ function peekGoogleReturnUrl(): string | null {
   );
 }
 
-function clearGoogleReturnStorage() {
+export function clearGoogleReturnStorage() {
   sessionStorage.removeItem(GOOGLE_RETURN_KEY);
   sessionStorage.removeItem(GOOGLE_REDIRECT_STARTED);
   localStorage.removeItem(GOOGLE_RETURN_BACKUP_KEY);
@@ -111,6 +115,7 @@ export async function signInWithGoogle(
       code === 'auth/popup-blocked' ||
       code === 'auth/cancelled-popup-request'
     ) {
+      markGoogleRedirectStarted();
       await signInWithRedirect(auth, googleProvider);
       return;
     }
@@ -121,6 +126,7 @@ export async function signInWithGoogle(
 /** @deprecated use signInWithGoogle */
 export async function startGoogleSignIn(returnUrl: string): Promise<void> {
   storeGoogleReturnUrl(returnUrl);
+  markGoogleRedirectStarted();
   await signInWithRedirect(auth, googleProvider);
 }
 
