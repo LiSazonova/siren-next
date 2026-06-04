@@ -1,10 +1,7 @@
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { getNextOrderNumber } from "./getNextOrderNumber";
-import { db } from "../firebase/client";
+import { auth } from '@/lib/firebase/client';
+import { ensureSessionCookie } from '@/lib/auth/ensureSession';
 
-type PaymentMethod = "card" | "paypal" | "cod";
-type PaymentStatus = "pending" | "paid" | "failed" | "unpaid";
-type OrderStatus = "new" | "processing" | "shipped" | "delivered" | "cancelled";
+type PaymentMethod = 'card' | 'paypal' | 'cod';
 
 type CreateOrderParams = {
   customer: {
@@ -15,65 +12,38 @@ type CreateOrderParams = {
     country: string;
     postalCode: string;
   };
-  items: any[];
+  items: unknown[];
   total: number;
   paymentMethod: PaymentMethod;
   deliveryMethod: string;
   deliveryCountry: string;
 };
 
-export async function createOrder({
-  customer,
-  items,
-  total,
-  paymentMethod,
-  deliveryMethod,
-  deliveryCountry,
-}: CreateOrderParams) {
-
-  const orderNumber = await getNextOrderNumber();
-
-  // 🔥 правильная логика статусов
-  let paymentStatus: PaymentStatus = "pending";
-
-  if (paymentMethod === "cod") {
-    paymentStatus = "unpaid";
+export async function createOrder(params: CreateOrderParams): Promise<number> {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error('Unauthorized');
   }
 
-  const order = {
-    id: String(orderNumber),
+  await ensureSessionCookie();
 
-    orderNumber,
-    customer,
-    items,
-    total,
+  const idToken = await user.getIdToken();
 
-    paymentMethod,
-    paymentStatus,
+  const res = await fetch('/api/orders/create', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${idToken}`,
+    },
+    credentials: 'include',
+    body: JSON.stringify(params),
+  });
 
-    status: "new" as OrderStatus,
-
-    deliveryMethod,
-    deliveryCountry,
-
-    createdAt: serverTimestamp(),
-  };
-
-  // ✅ сохраняем заказ
-  await setDoc(doc(db, "orders", String(orderNumber)), order);
-
-  // 📩 уведомления (email + telegram)
-  try {
-    await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/send-order`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(order),
-    });
-  } catch (error) {
-    console.error('SEND ORDER API ERROR:', error);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error ?? 'Failed to create order');
   }
 
+  const { orderNumber } = await res.json();
   return orderNumber;
 }

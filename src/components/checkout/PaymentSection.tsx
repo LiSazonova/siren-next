@@ -13,7 +13,7 @@ export default function PaymentSection({
     <div className="space-y-6 mt-8">
       <h2 className="uppercase text-xl font-semibold">{t('payment')}:</h2>
 
-      {/* 💳 Card (WayForPay) */}
+      {/* 💳 Card (LiqPay) */}
       <label className="flex items-center gap-3 cursor-pointer">
         <input
           type="radio"

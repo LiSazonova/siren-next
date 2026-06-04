@@ -18,25 +18,6 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setError(null);
-  //   setLoading(true);
-  //   try {
-  //     await sendPasswordResetEmail(auth, email);
-  //     setSent(true);
-  //   } catch (e: any) {
-  //     if (e?.code === 'auth/user-not-found') {
-  //       setError('Користувача з таким email не знайдено.');
-  //     } else if (e?.code === 'auth/invalid-email') {
-  //       setError('Невірний email.');
-  //     } else {
-  //       setError('Не вдалося надіслати лист. Спробуйте пізніше.');
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);

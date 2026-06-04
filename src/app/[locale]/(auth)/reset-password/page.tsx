@@ -1,9 +1,16 @@
-'use client';
+import { Suspense } from 'react';
+import ResetPasswordClient from './ResetPasswordClient';
 
 export default function ResetPasswordPage() {
   return (
-    <section className="min-h-screen flex items-center justify-center bg-black text-white">
-      <p>Reset password page temporarily disabled.</p>
-    </section>
+    <Suspense
+      fallback={
+        <section className="min-h-screen bg-black text-white flex items-center justify-center">
+          <p>Loading…</p>
+        </section>
+      }
+    >
+      <ResetPasswordClient />
+    </Suspense>
   );
 }

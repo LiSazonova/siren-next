@@ -114,6 +114,25 @@
     "sentMessage": "Password reset email sent to {email}",
     "noProfile": "I DON'T HAVE AN ACCOUNT"
   },
+  "resetPassword": {
+    "title": "New password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "saveButton": "Save password",
+    "saving": "Saving...",
+    "loading": "Checking link...",
+    "successTitle": "Password updated",
+    "successHint": "Redirecting to sign in...",
+    "invalidTitle": "Link unavailable",
+    "invalidLink": "This reset link is invalid or has already been used.",
+    "expiredLink": "This link has expired. Please request a new one.",
+    "alreadyChangedHint": "If you already set a new password in the email, sign in with it.",
+    "weakPassword": "Password must be at least 6 characters.",
+    "mismatch": "Passwords do not match.",
+    "failed": "Could not reset password. Try again.",
+    "goSignIn": "Sign in",
+    "requestAgain": "Request a new reset link"
+  },
   "toggleButtons": {
     "login": "Login",
     "register": "Register",
@@ -188,7 +207,7 @@
     "payment": {
       "title": "💳 Payment Methods",
       "intro": "You can choose the most convenient payment method for you:",
-      "onlineTitle": "Online payment on the website (Monobank / LiqPay / WayForPay):",
+      "onlineTitle": "Online payment on the website (Monobank / LiqPay):",
       "onlineContent": "Fast and secure payment by Visa or MasterCard, as well as via Apple Pay / Google Pay. No additional fees.",
       "ibanTitle": "Payment by bank details (IBAN):",
       "ibanContent": "After order confirmation, the manager will send you official payment details for use in your banking app (Privat24, Monobank, etc.).",
@@ -231,7 +250,7 @@
       "paymentContent1": "International orders are shipped exclusively on a 100% prepayment basis (including shipping costs). Cash on Delivery (COD) is not available for international shipments.",
       "paymentContent2": "You can pay for your order in your preferred currency ($ USD, € EUR, ₴ UAH):",
       "paymentOnlineTitle": "Online Payment on the Website:",
-      "paymentOnlineContent": "Via secure payment gateways (WayForPay, LiqPay, Mono-acquiring) using Visa / MasterCard, as well as Apple Pay and Google Pay.",
+      "paymentOnlineContent": "Via secure payment gateways (LiqPay, Mono-acquiring) using Visa / MasterCard, as well as Apple Pay and Google Pay.",
       "customsTitle": "⚠️ Customs, Duties & Taxes",
       "customsContent1": "Please Note! The shipping cost does not include customs duties, import taxes (such as VAT), or brokerage fees that may be charged by your country's customs office upon arrival.",
       "customsContent2": "Each country has its own limits for duty-free import (for instance, in EU countries, VAT is charged from the first euro cent if the parcel is not sent via the IOSS system).",

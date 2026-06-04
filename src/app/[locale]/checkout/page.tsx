@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import CheckoutForm from '@/components/checkout/CheckoutForm';
 import OrderSummary from '@/components/checkout/OrderSummary';
+import CheckoutButton from '@/components/CheckoutButton';
 
 export default function CheckoutPage() {
   const t = useTranslations('checkout');
@@ -33,6 +34,11 @@ export default function CheckoutPage() {
   const [delivery, setDelivery] = useState('');
   const [payment, setPayment] = useState<'card' | 'paypal' | 'cod' | ''>('');
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+  const [liqPayCheckout, setLiqPayCheckout] = useState<{
+    orderId: string;
+    amount: number;
+    description: string;
+  } | null>(null);
 
   const update = (key: string, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -77,51 +83,21 @@ export default function CheckoutPage() {
         return;
       }
 
-      // 💳 WAYFORPAY (ИСПРАВЛЕНО)
+      // 💳 LiqPay
       if (payment === 'card') {
-        const res = await fetch('/api/payments/wayforpay', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            orderNumber: orderId,
-            amount: subtotal,
-            productName: items.map((i) => i.name),
-            productCount: items.map(() => '1'),
-            productPrice: items.map((i) => String(i.price)),
-            locale,
-          }),
+        setLiqPayCheckout({
+          orderId: String(orderId),
+          amount: subtotal,
+          description: `Order #${orderId}`,
         });
-
-        const data = await res.json();
-
-        const formEl = document.createElement('form');
-        formEl.method = 'POST';
-        formEl.action = 'https://secure.wayforpay.com/pay';
-
-        Object.entries(data).forEach(([key, value]) => {
-          if (Array.isArray(value)) {
-            value.forEach((v) => {
-              const input = document.createElement('input');
-              input.name = `${key}[]`;
-              input.value = v;
-              formEl.appendChild(input);
-            });
-          } else {
-            const input = document.createElement('input');
-            input.name = key;
-            input.value = String(value);
-            formEl.appendChild(input);
-          }
-        });
-
-        document.body.appendChild(formEl);
-        formEl.submit();
         return;
       }
     } catch (error) {
       console.error(error);
+      if (error instanceof Error && error.message === 'Unauthorized') {
+        router.push(`/${locale}/signin?returnUrl=/${locale}/checkout`);
+        return;
+      }
       router.push(`/${locale}/checkout/error`);
     } finally {
       setIsPlacingOrder(false);
@@ -147,10 +123,19 @@ export default function CheckoutPage() {
           items={items}
           subtotal={subtotal}
           onSubmit={placeOrder}
-          isLoading={isPlacingOrder}
+          isLoading={isPlacingOrder || !!liqPayCheckout}
           isDisabled={!isFormValid}
         />
       </div>
+
+      {liqPayCheckout && (
+        <CheckoutButton
+          orderId={liqPayCheckout.orderId}
+          amount={liqPayCheckout.amount}
+          description={liqPayCheckout.description}
+          autoSubmit
+        />
+      )}
     </main>
   );
 }
