@@ -1,17 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '@/lib/firebase/client';
 import { useLocale, useTranslations } from 'next-intl';
+import { getAuthErrorCode } from '@/lib/auth/firebaseAuth';
 
 export default function ForgotPasswordPage() {
-  const router = useRouter();
   const locale = useLocale();
   const t = useTranslations('forgotPassword');
+  const tErr = useTranslations('authErrors');
 
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
@@ -25,22 +25,24 @@ export default function ForgotPasswordPage() {
     try {
       const origin =
         typeof window !== 'undefined' ? window.location.origin : '';
-      // куда попадёт пользователь после клика по письму
       const url = `${origin}/${locale}/reset-password`;
 
       await sendPasswordResetEmail(auth, email, {
-        url, // наш экран сброса пароля
-        handleCodeInApp: true, // пусть обрабатывает наш фронт
+        url,
+        handleCodeInApp: false,
       });
 
       setSent(true);
-    } catch (e: any) {
-      if (e?.code === 'auth/user-not-found') {
-        setError('Користувача з таким email не знайдено.');
-      } else if (e?.code === 'auth/invalid-email') {
-        setError('Невірний email.');
+    } catch (e: unknown) {
+      const code = getAuthErrorCode(e);
+      if (code === 'auth/user-not-found') {
+        setError(tErr('userNotFound'));
+      } else if (code === 'auth/invalid-email') {
+        setError(tErr('invalidEmail'));
+      } else if (code === 'auth/unauthorized-continue-uri') {
+        setError(tErr('resetUriNotAllowed'));
       } else {
-        setError('Не вдалося надіслати лист. Спробуйте пізніше.');
+        setError(tErr('resetEmailFailed'));
       }
     } finally {
       setLoading(false);
@@ -120,7 +122,7 @@ export default function ForgotPasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="h-[58px] uppercase text-[24px] md:text-[28px] text-center"
+              className="w-full h-[58px] uppercase text-[24px] md:text-[28px] text-center text-black bg-white hover:opacity-90 disabled:opacity-60 transition"
             >
               {loading ? t('loading') : t('sendButton')}
             </button>
