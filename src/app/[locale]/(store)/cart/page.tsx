@@ -5,10 +5,15 @@ import Link from 'next/link';
 import { useCart, useCartItems, useCartSubtotal } from '@/stores/cart';
 import Icon from '@/components/Icon';
 import { useLocale, useTranslations } from 'next-intl';
+import useAuthUser from '@/hooks/useAuthUser';
 
 export default function CartPage() {
   const locale = useLocale();
   const t = useTranslations('cart');
+  const { user, loading: authLoading } = useAuthUser();
+  const checkoutReturn = encodeURIComponent(`/${locale}/checkout`);
+  const signInHref = `/${locale}/signin?returnUrl=${checkoutReturn}`;
+  const signUpHref = `/${locale}/signup?returnUrl=${checkoutReturn}`;
 
   const items = useCartItems();
   const subtotal = useCartSubtotal();
@@ -243,19 +248,35 @@ export default function CartPage() {
       </ul>
 
       {/* Итоги */}
-      <div className="mt-12 pt-6 border-t border-[#747474] flex flex-col lg:flex-row items-center md:items-start lg:items-center justify-between  gap-6">
-        <div className="w-full flex flex-col md:flex-row gap-4 lg:w-auto uppercase text-[24px] md:text-[28px]">
-          <p>{t('total')}:</p>
-          <p>
-            {subtotal} {t('currency')}
-          </p>
+      <div className="mt-12 pt-6 border-t border-[#747474] flex flex-col gap-6">
+        {!authLoading && !user && (
+          <div className="rounded border border-[#747474] bg-neutral-50 px-4 py-4 text-[16px] md:text-[18px] text-neutral-800">
+            <p>{t('authRequired')}</p>
+            <p className="mt-3 flex flex-wrap gap-4 uppercase text-[16px]">
+              <Link href={signInHref} className="underline hover:opacity-80">
+                {t('signIn')}
+              </Link>
+              <Link href={signUpHref} className="underline hover:opacity-80">
+                {t('signUp')}
+              </Link>
+            </p>
+          </div>
+        )}
+
+        <div className="flex flex-col lg:flex-row items-center md:items-start lg:items-center justify-between gap-6">
+          <div className="w-full flex flex-col md:flex-row gap-4 lg:w-auto uppercase text-[24px] md:text-[28px]">
+            <p>{t('total')}:</p>
+            <p>
+              {subtotal} {t('currency')}
+            </p>
+          </div>
+          <Link
+            href={user ? `/${locale}/checkout` : signInHref}
+            className="w-full md:w-auto inline-flex items-center justify-center px-6 md:px-10 py-4 bg-black text-white uppercase text-[28px]"
+          >
+            {t('checkout')}
+          </Link>
         </div>
-        <Link
-          href={`/${locale}/checkout`}
-          className="w-full md:w-auto inline-flex items-center justify-center px-6 md:px-10 py-4 bg-black text-white uppercase text-[28px]"
-        >
-          {t('checkout')}
-        </Link>
       </div>
     </main>
   );

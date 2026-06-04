@@ -87,8 +87,12 @@ export default function ProductInfo({ product }: InfoProps) {
         </div>
       </div>
 
+      <p className="mt-[80px] md:mt-[94px] xl:mt-[160px] text-[14px] md:text-[16px] text-[#747474]">
+        {t('purchaseRequiresAuth')}
+      </p>
+
       {/* Кнопки */}
-      <div className="flex flex-col md:flex-row gap-4 mt-[80px] md:mt-[94px] xl:mt-[160px]">
+      <div className="flex flex-col md:flex-row gap-4 mt-4">
         <button
           onClick={handleBuyNow}
           className="flex-1 bg-black text-white py-3 text-[18px] uppercase"

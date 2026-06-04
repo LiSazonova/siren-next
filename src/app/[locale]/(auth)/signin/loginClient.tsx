@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -10,6 +9,7 @@ import {
   createSessionFromUser,
   getAuthErrorCode,
   hardNavigate,
+  isCheckoutReturnUrl,
   signInWithGoogle,
 } from '@/lib/auth/firebaseAuth';
 import { useAuthSessionFinish } from '@/hooks/useAuthSessionFinish';
@@ -19,7 +19,6 @@ import { useLocale, useTranslations } from 'next-intl';
 type Props = { returnUrl?: string };
 
 export default function LoginClient({ returnUrl = '' }: Props) {
-  const router = useRouter();
   const locale = useLocale();
   const t = useTranslations('loginPage');
   const tErr = useTranslations('authErrors');
@@ -37,6 +36,10 @@ export default function LoginClient({ returnUrl = '' }: Props) {
     const isAuth = /\/(en|ua)\/(signin|signup)(\/|$)/.test(raw);
     return isAuth ? `/${locale}` : raw || `/${locale}`;
   };
+
+  const signupHref = returnUrl
+    ? `/${locale}/signup?returnUrl=${encodeURIComponent(returnUrl)}`
+    : `/${locale}/signup`;
 
   const finishLogin = async () => {
     await createSessionFromUser();
@@ -106,6 +109,12 @@ export default function LoginClient({ returnUrl = '' }: Props) {
             {t('title')}
           </h1>
 
+          {isCheckoutReturnUrl(returnUrl) && (
+            <p className="mb-6 text-center text-[#c8c8c8] text-sm md:text-base max-w-[401px]">
+              {t('checkoutRequired')}
+            </p>
+          )}
+
           {(error || googleError) && (
             <p
               role="alert"
@@ -172,7 +181,7 @@ export default function LoginClient({ returnUrl = '' }: Props) {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || googleWorking}
               className="w-full h-[58px] font-lora text-[24px] md:text-[28px] leading-5 uppercase text-white text-center bg-[#747474] hover:opacity-90 disabled:opacity-60 mb-3 transition"
             >
               {loading ? t('loading') : t('signinButton')}
@@ -180,13 +189,13 @@ export default function LoginClient({ returnUrl = '' }: Props) {
 
             <GoogleSignInButton
               label={t('googleButton')}
-              loading={loading}
-              disabled={loading}
+              loading={loading || googleWorking}
+              disabled={loading || googleWorking}
               onClick={handleGoogle}
             />
 
             <p className="text-center font-inter text-[18px] uppercase text-[#747474] mt-9">
-              <Link href={`/${locale}/signup`}>{t('noProfile')}</Link>
+              <Link href={signupHref}>{t('noProfile')}</Link>
             </p>
           </form>
         </div>

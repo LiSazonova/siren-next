@@ -16,7 +16,7 @@ export function resetRedirectResultCache() {
 
 let redirectResultPromise: Promise<void> | null = null;
 
-function isLocalDevHost(): boolean {
+export function isLocalDevHost(): boolean {
   if (typeof window === 'undefined') return false;
   const host = window.location.hostname;
   return host === 'localhost' || host === '127.0.0.1';
@@ -61,6 +61,10 @@ export function resolvePostLoginPath(locale: string): string {
   return `/${locale}`;
 }
 
+export function isCheckoutReturnUrl(returnUrl: string): boolean {
+  return /\/(en|ua)\/checkout(\/|$)/.test(returnUrl);
+}
+
 export async function createSessionFromUser(): Promise<void> {
   const idToken = await auth.currentUser?.getIdToken(true);
   if (!idToken) throw new Error('no-id-token');
@@ -76,15 +80,21 @@ export async function createSessionFromUser(): Promise<void> {
 }
 
 /**
- * Google sign-in: popup on localhost (reliable in dev), redirect on production.
+ * Google auth (login + registration — Firebase creates account if new).
+ * Popup on localhost; full redirect on production.
  */
-export async function signInWithGoogle(returnUrl: string, locale: string): Promise<void> {
-  storeGoogleReturnUrl(returnUrl);
+export async function signInWithGoogle(
+  returnUrl: string,
+  locale: string,
+): Promise<void> {
+  const safePath = returnUrl.startsWith('/') ? returnUrl : `/${locale}`;
+  storeGoogleReturnUrl(safePath);
 
   if (isLocalDevHost()) {
     await signInWithPopup(auth, googleProvider);
     await createSessionFromUser();
-    hardNavigate(resolvePostLoginPath(locale));
+    clearGoogleReturnStorage();
+    hardNavigate(safePath);
     return;
   }
 

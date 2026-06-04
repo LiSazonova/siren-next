@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -13,6 +12,7 @@ import {
   createSessionFromUser,
   getAuthErrorCode,
   hardNavigate,
+  isCheckoutReturnUrl,
   signInWithGoogle,
 } from '@/lib/auth/firebaseAuth';
 import { useAuthSessionFinish } from '@/hooks/useAuthSessionFinish';
@@ -22,11 +22,11 @@ import { useLocale, useTranslations } from 'next-intl';
 type Props = { returnUrl?: string };
 
 export default function RegisterClient({ returnUrl = '' }: Props) {
-  const router = useRouter();
   const locale = useLocale();
   const t = useTranslations('registerPage');
   const tErr = useTranslations('authErrors');
-  const { working: googleWorking } = useAuthSessionFinish(true);
+  const { working: googleWorking, error: googleError } =
+    useAuthSessionFinish(true);
 
   const [form, setForm] = useState({ username: '', email: '', password: '' });
   const [error, setError] = useState<string | null>(null);
@@ -40,6 +40,10 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
     const isAuth = /\/(en|ua)\/(signin|signup)(\/|$)/.test(raw);
     return isAuth ? `/${locale}/checkout` : raw || `/${locale}/checkout`;
   };
+
+  const signinHref = returnUrl
+    ? `/${locale}/signin?returnUrl=${encodeURIComponent(returnUrl)}`
+    : `/${locale}/signin`;
 
   const finishLogin = async () => {
     await createSessionFromUser();
@@ -91,6 +95,14 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
     }
   };
 
+  const displayError =
+    error ||
+    (googleError === 'session-fail'
+      ? tErr('sessionFailed')
+      : googleError
+        ? tErr('googleFailed')
+        : null);
+
   return (
     <section className="w-screen min-h-screen bg-black text-white px-5 py-6">
       <div className="flex flex-col-reverse items-center lg:flex-row lg:justify-center lg:gap-[138px]">
@@ -110,13 +122,25 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
             {t('title')}
           </h1>
 
-          {error && (
+          {isCheckoutReturnUrl(returnUrl) && (
+            <p className="mb-6 text-center text-[#c8c8c8] text-sm md:text-base max-w-[401px]">
+              {t('checkoutRequired')}
+            </p>
+          )}
+
+          {displayError && (
             <p
               role="alert"
               aria-live="assertive"
               className="text-[16px] md:text-[18px] text-center text-red-400 mb-4"
             >
-              {error}
+              {displayError}
+            </p>
+          )}
+
+          {googleWorking && (
+            <p className="mb-4 text-center text-[#747474] text-sm">
+              {tErr('completingSignIn')}
             </p>
           )}
 
@@ -124,7 +148,10 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
             onSubmit={handleSubmit}
             className="flex flex-col w-full max-w-[401px]"
           >
-            <label htmlFor="username" className="font-inter text-[18px] text-left mb-3">
+            <label
+              htmlFor="username"
+              className="font-inter text-[18px] text-left mb-3"
+            >
               {t('username')}
             </label>
             <input
@@ -153,7 +180,10 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
               className="w-full h-[58px] text-[20px] text-black placeholder:text-[18px] placeholder:text-[#747474] bg-white outline-none px-[18px] mb-6"
             />
 
-            <label htmlFor="password" className="font-inter text-[18px] text-left mb-3">
+            <label
+              htmlFor="password"
+              className="font-inter text-[18px] text-left mb-3"
+            >
               {t('password')}
             </label>
             <input
@@ -171,7 +201,7 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || googleWorking}
               className="w-full h-[58px] font-lora text-[24px] md:text-[28px] leading-5 uppercase text-white text-center bg-[#747474] hover:opacity-90 disabled:opacity-60 mb-3 transition"
             >
               {loading ? t('loading') : t('signupButton')}
@@ -185,7 +215,7 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
             />
 
             <p className="text-[18px] text-center text-[#747474] mt-9">
-              <Link href={`/${locale}/signin`}>{t('haveProfile')}</Link>
+              <Link href={signinHref}>{t('haveProfile')}</Link>
             </p>
           </form>
         </div>

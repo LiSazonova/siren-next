@@ -9,6 +9,7 @@ import {
   createSessionFromUser,
   getAuthErrorCode,
   hardNavigate,
+  isLocalDevHost,
   resetRedirectResultCache,
   resolvePostLoginPath,
 } from '@/lib/auth/firebaseAuth';
@@ -23,7 +24,8 @@ export function useAuthSessionFinish(enabled = true) {
   const finishing = useRef(false);
 
   useEffect(() => {
-    if (!enabled) return;
+    // On localhost popup flow is handled inside signInWithGoogle()
+    if (!enabled || isLocalDevHost()) return;
 
     resetRedirectResultCache();
     finishing.current = false;

@@ -63,7 +63,8 @@
     "messages": {
       "goToCheckout": "Go to checkout",
       "addedToCart": "{name} added to cart"
-    }
+    },
+    "purchaseRequiresAuth": "To complete your purchase, please register and sign in to your account."
   },
   "cart": {
     "emptyTitle": "Not found",
@@ -77,7 +78,10 @@
     "remove": "Remove item",
     "total": "Order total",
     "checkout": "Proceed to checkout",
-    "currency": "UAH"
+    "currency": "UAH",
+    "authRequired": "To place an order, please register and sign in to your account.",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
   },
   "authErrors": {
     "generic": "Something went wrong. Please try again.",
@@ -104,7 +108,8 @@
     "googleButton": "Sign in with Google",
     "noProfile": "I DON'T HAVE AN ACCOUNT",
     "email": "Email",
-    "password": "Password"
+    "password": "Password",
+    "checkoutRequired": "Sign in or register to complete your order."
   },
   "registerPage": {
     "title": "Registration",
@@ -117,7 +122,8 @@
     "loading": "Registering…",
     "signupButton": "SIGN UP",
     "googleButton": "Sign up with Google",
-    "haveProfile": "I ALREADY HAVE A PROFILE"
+    "haveProfile": "I ALREADY HAVE A PROFILE",
+    "checkoutRequired": "Register or sign in to complete your order."
   },
   "forgotPassword": {
     "title": "Forgot your password?",
