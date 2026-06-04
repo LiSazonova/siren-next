@@ -1,12 +1,5 @@
-import GoogleAuthRedirect from '@/components/auth/GoogleAuthRedirect';
-
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <>
-      <GoogleAuthRedirect />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 };
 
 export default Layout;

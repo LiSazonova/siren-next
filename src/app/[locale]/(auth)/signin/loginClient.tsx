@@ -1,17 +1,18 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/lib/firebase/client';
 import {
   createSessionFromUser,
   getAuthErrorCode,
-  hasPendingGoogleSignIn,
-  startGoogleSignIn,
+  hardNavigate,
+  signInWithGoogle,
 } from '@/lib/auth/firebaseAuth';
-import { auth } from '@/lib/firebase/client';
+import { useAuthSessionFinish } from '@/hooks/useAuthSessionFinish';
 import GoogleSignInButton from '@/components/auth/GoogleSignInButton';
 import { useLocale, useTranslations } from 'next-intl';
 
@@ -22,6 +23,7 @@ export default function LoginClient({ returnUrl = '' }: Props) {
   const locale = useLocale();
   const t = useTranslations('loginPage');
   const tErr = useTranslations('authErrors');
+  const { working: googleWorking, error: googleError } = useAuthSessionFinish(true);
 
   const [form, setForm] = useState({ identifier: '', password: '' });
   const [error, setError] = useState<string | null>(null);
@@ -36,38 +38,9 @@ export default function LoginClient({ returnUrl = '' }: Props) {
     return isAuth ? `/${locale}` : raw || `/${locale}`;
   };
 
-  const redirectAfterAuth = (path: string) => {
-    router.replace(path);
-    router.refresh();
-    // Fallback if client router does not navigate (seen after OAuth redirect)
-    setTimeout(() => {
-      if (window.location.pathname.includes('/signin')) {
-        window.location.assign(path);
-      }
-    }, 800);
-  };
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      await auth.authStateReady();
-      if (cancelled || hasPendingGoogleSignIn()) return;
-      if (!auth.currentUser) return;
-      try {
-        await createSessionFromUser();
-        redirectAfterAuth(getSafeReturn());
-      } catch {
-        /* session cookie not ready yet */
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [locale, returnUrl]);
-
   const finishLogin = async () => {
     await createSessionFromUser();
-    redirectAfterAuth(getSafeReturn());
+    hardNavigate(getSafeReturn());
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -100,9 +73,16 @@ export default function LoginClient({ returnUrl = '' }: Props) {
     setError(null);
     setLoading(true);
     try {
-      await startGoogleSignIn(getSafeReturn());
-    } catch {
-      setError(tErr('googleFailed'));
+      await signInWithGoogle(getSafeReturn(), locale);
+    } catch (err: unknown) {
+      const code = getAuthErrorCode(err);
+      if (code === 'auth/popup-closed-by-user') {
+        setLoading(false);
+        return;
+      }
+      setError(
+        code === 'session-fail' ? tErr('sessionFailed') : tErr('googleFailed'),
+      );
       setLoading(false);
     }
   };
@@ -126,12 +106,21 @@ export default function LoginClient({ returnUrl = '' }: Props) {
             {t('title')}
           </h1>
 
-          {error && (
+          {(error || googleError) && (
             <p
               role="alert"
               className="mb-4 text-center text-red-400 text-sm md:text-base"
             >
-              {error}
+              {error ||
+                (googleError === 'session-fail'
+                  ? tErr('sessionFailed')
+                  : tErr('googleFailed'))}
+            </p>
+          )}
+
+          {googleWorking && (
+            <p className="mb-4 text-center text-[#747474] text-sm">
+              {tErr('completingSignIn')}
             </p>
           )}
 

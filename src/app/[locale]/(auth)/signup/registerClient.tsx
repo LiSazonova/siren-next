@@ -12,8 +12,10 @@ import { auth } from '@/lib/firebase/client';
 import {
   createSessionFromUser,
   getAuthErrorCode,
-  startGoogleSignIn,
+  hardNavigate,
+  signInWithGoogle,
 } from '@/lib/auth/firebaseAuth';
+import { useAuthSessionFinish } from '@/hooks/useAuthSessionFinish';
 import GoogleSignInButton from '@/components/auth/GoogleSignInButton';
 import { useLocale, useTranslations } from 'next-intl';
 
@@ -24,6 +26,7 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
   const locale = useLocale();
   const t = useTranslations('registerPage');
   const tErr = useTranslations('authErrors');
+  const { working: googleWorking } = useAuthSessionFinish(true);
 
   const [form, setForm] = useState({ username: '', email: '', password: '' });
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +43,7 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
 
   const finishLogin = async () => {
     await createSessionFromUser();
-    router.push(getSafeReturn());
+    hardNavigate(getSafeReturn());
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -74,9 +77,16 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
     setError(null);
     setLoading(true);
     try {
-      await startGoogleSignIn(getSafeReturn());
-    } catch {
-      setError(tErr('googleFailed'));
+      await signInWithGoogle(getSafeReturn(), locale);
+    } catch (err: unknown) {
+      const code = getAuthErrorCode(err);
+      if (code === 'auth/popup-closed-by-user') {
+        setLoading(false);
+        return;
+      }
+      setError(
+        code === 'session-fail' ? tErr('sessionFailed') : tErr('googleFailed'),
+      );
       setLoading(false);
     }
   };
@@ -169,8 +179,8 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
 
             <GoogleSignInButton
               label={t('googleButton')}
-              loading={loading}
-              disabled={loading}
+              loading={loading || googleWorking}
+              disabled={loading || googleWorking}
               onClick={handleGoogle}
             />
 
