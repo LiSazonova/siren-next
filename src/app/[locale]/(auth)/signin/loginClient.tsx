@@ -88,9 +88,9 @@ export default function LoginClient({ returnUrl = '' }: Props) {
         setLoading(false);
         return;
       }
-      setError(
-        code === 'session-fail' ? tErr('sessionFailed') : tErr('googleFailed'),
-      );
+      if (code === 'auth/popup-blocked') setError(tErr('popupBlocked'));
+      else if (code === 'session-fail') setError(tErr('sessionFailed'));
+      else setError(tErr('googleFailed'));
       setLoading(false);
     }
   };

@@ -4,15 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from 'firebase/auth';
-import { auth } from '@/lib/firebase/client';
-import {
   createSessionFromUser,
   getAuthErrorCode,
   hardNavigate,
   isCheckoutReturnUrl,
+  registerWithEmailOrSignIn,
   signInWithGoogle,
 } from '@/lib/auth/firebaseAuth';
 import { useAuthSessionFinish } from '@/hooks/useAuthSessionFinish';
@@ -38,40 +34,36 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
   const getSafeReturn = () => {
     const raw = returnUrl;
     const isAuth = /\/(en|ua)\/(signin|signup)(\/|$)/.test(raw);
-    return isAuth ? `/${locale}/checkout` : raw || `/${locale}/checkout`;
+    return isAuth ? `/${locale}` : raw || `/${locale}`;
   };
 
   const signinHref = returnUrl
     ? `/${locale}/signin?returnUrl=${encodeURIComponent(returnUrl)}`
     : `/${locale}/signin`;
 
-  const finishLogin = async () => {
-    await createSessionFromUser();
-    hardNavigate(getSafeReturn());
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
     try {
-      const { user } = await createUserWithEmailAndPassword(
-        auth,
+      await registerWithEmailOrSignIn(
         form.email,
         form.password,
+        form.username,
       );
-      if (user && form.username.trim()) {
-        await updateProfile(user, { displayName: form.username.trim() });
-      }
-      await finishLogin();
+      await createSessionFromUser();
+      hardNavigate(getSafeReturn());
     } catch (err: unknown) {
       const code = getAuthErrorCode(err);
       if (code === 'auth/weak-password') setError(tErr('weakPassword'));
-      else if (code === 'auth/email-already-in-use')
-        setError(tErr('emailInUse'));
-      else if ((err as Error)?.message?.includes('session-fail'))
+      else if (
+        code === 'auth/invalid-credential' ||
+        code === 'auth/wrong-password'
+      ) {
+        setError(tErr('emailInUseWrongPassword'));
+      } else if ((err as Error)?.message?.includes('session-fail')) {
         setError(tErr('sessionFailed'));
-      else setError(tErr('registerFailed'));
+      } else setError(tErr('registerFailed'));
     } finally {
       setLoading(false);
     }
@@ -88,9 +80,9 @@ export default function RegisterClient({ returnUrl = '' }: Props) {
         setLoading(false);
         return;
       }
-      setError(
-        code === 'session-fail' ? tErr('sessionFailed') : tErr('googleFailed'),
-      );
+      if (code === 'auth/popup-blocked') setError(tErr('popupBlocked'));
+      else if (code === 'session-fail') setError(tErr('sessionFailed'));
+      else setError(tErr('googleFailed'));
       setLoading(false);
     }
   };

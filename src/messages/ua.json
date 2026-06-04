@@ -91,6 +91,8 @@
     "googleCancelled": "Вхід через Google скасовано",
     "weakPassword": "Занадто простий пароль (мінімум 6 символів).",
     "emailInUse": "Цей email вже використовується.",
+    "emailInUseWrongPassword": "Цей email вже зареєстрований. Увійдіть з правильним паролем або через Google.",
+    "popupBlocked": "Браузер заблокував вікно Google. Дозвольте спливаючі вікна для сайту та спробуйте знову.",
     "registerFailed": "Помилка реєстрації. Спробуйте пізніше.",
     "userNotFound": "Користувача з таким email не знайдено.",
     "invalidEmail": "Невірний email.",

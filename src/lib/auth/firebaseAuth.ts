@@ -1,7 +1,10 @@
 import {
+  createUserWithEmailAndPassword,
   getRedirectResult,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signInWithRedirect,
+  updateProfile,
   type AuthError,
 } from 'firebase/auth';
 import { auth, googleProvider } from '@/lib/firebase/client';
@@ -93,8 +96,8 @@ export async function createSessionFromUser(): Promise<void> {
 }
 
 /**
- * Google auth (login + registration — Firebase creates account if new).
- * Popup first (reliable on custom domains); redirect if popup is blocked.
+ * Google auth (login + registration — signs in existing users or creates new).
+ * Popup only: redirect breaks on custom domains without extra OAuth URIs.
  */
 export async function signInWithGoogle(
   returnUrl: string,
@@ -111,15 +114,30 @@ export async function signInWithGoogle(
   } catch (err) {
     const code = getAuthErrorCode(err);
     if (code === 'auth/popup-closed-by-user') return;
-    if (
-      code === 'auth/popup-blocked' ||
-      code === 'auth/cancelled-popup-request'
-    ) {
-      markGoogleRedirectStarted();
-      await signInWithRedirect(auth, googleProvider);
-      return;
-    }
     throw err;
+  }
+}
+
+/** Register with email; if account exists, sign in with the same password. */
+export async function registerWithEmailOrSignIn(
+  email: string,
+  password: string,
+  displayName?: string,
+): Promise<'created' | 'signed-in'> {
+  const name = displayName?.trim();
+
+  try {
+    const { user } = await createUserWithEmailAndPassword(auth, email, password);
+    if (user && name) await updateProfile(user, { displayName: name });
+    return 'created';
+  } catch (err) {
+    if (getAuthErrorCode(err) !== 'auth/email-already-in-use') throw err;
+
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    if (user && name && !user.displayName) {
+      await updateProfile(user, { displayName: name });
+    }
+    return 'signed-in';
   }
 }
 

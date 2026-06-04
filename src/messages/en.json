@@ -91,6 +91,8 @@
     "googleCancelled": "Google sign-in was cancelled",
     "weakPassword": "Password is too weak (minimum 6 characters).",
     "emailInUse": "This email is already in use.",
+    "emailInUseWrongPassword": "This email is already registered. Sign in with the correct password or use Google.",
+    "popupBlocked": "Your browser blocked the Google sign-in window. Allow pop-ups for this site and try again.",
     "registerFailed": "Registration failed. Please try again later.",
     "userNotFound": "No account found with this email.",
     "invalidEmail": "Invalid email address.",
