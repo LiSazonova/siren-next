@@ -1,4 +1,4 @@
-import { getOrderById } from '@/lib/orders/getOrderById';
+import { getOrderByIdAdmin } from '@/lib/orders/getOrderByIdAdmin';
 import { Suspense } from 'react';
 import SuccessClient from '@/app/[locale]/checkout/success/SuccessClient';
 
@@ -16,7 +16,7 @@ export default async function OrderSuccessPage({
     return <div className="text-center py-20">No order ID</div>;
   }
 
-  const orderData = await getOrderById(orderId);
+  const orderData = await getOrderByIdAdmin(orderId);
 
   if (!orderData) {
     return (

@@ -1,5 +1,5 @@
 import OrderStatus from '@/components/admin/OrderStatus';
-import { getOrderById } from '@/lib/orders/getOrderById';
+import { getOrderByIdAdmin } from '@/lib/orders/getOrderByIdAdmin';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,7 +10,7 @@ interface Props {
 export default async function OrderPage({ params }: Props) {
   const { id } = await params;
 
-  const order = await getOrderById(id);
+  const order = await getOrderByIdAdmin(id);
 
   if (!order) {
     return <div>Order not found</div>;

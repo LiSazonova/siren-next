@@ -14,7 +14,7 @@ export interface Customer {
 }
 
 export type PaymentMethod = 'card' | 'paypal' | 'cod'
-export type PaymentStatus = 'pending' | 'paid' | 'failed'
+export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'unpaid'
 
 export type OrderStatus =
   | 'new'
