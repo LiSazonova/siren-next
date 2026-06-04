@@ -3,8 +3,7 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { adminDb } from '@/lib/firebase/admin';
 import { verifyApiAuth } from '@/lib/auth/verifyApiAuth';
 import { getNextOrderNumberAdmin } from '@/lib/orders/getNextOrderNumberAdmin';
-import { sendOrderEmail } from '@/lib/email/sendOrderEmail';
-import { sendTelegramMessage } from '@/lib/telegram/sendTelegramMessage';
+import { notifyOrderOwners } from '@/lib/orders/notifyOrderOwners';
 
 type PaymentMethod = 'card' | 'paypal' | 'cod';
 type PaymentStatus = 'pending' | 'paid' | 'failed' | 'unpaid';
@@ -50,17 +49,21 @@ export async function POST(req: Request) {
       createdAt: FieldValue.serverTimestamp(),
     };
 
-    await adminDb.collection('orders').doc(String(orderNumber)).set(order);
+    const orderRef = adminDb.collection('orders').doc(String(orderNumber));
+    await orderRef.set({
+      ...order,
+      notificationsSent: false,
+      paymentFailedNotified: false,
+      paidNotificationSent: false,
+    });
 
-    // Card: notify after LiqPay payment in /api/liqpay/callback
-    if (paymentMethod !== 'card') {
-      try {
-        const orderPayload = { ...order, createdAt: new Date().toISOString() };
-        await sendOrderEmail(orderPayload);
-        await sendTelegramMessage(orderPayload);
-      } catch (notifyError) {
-        console.error('ORDER NOTIFY ERROR:', notifyError);
-      }
+    // Card: notify immediately (pending) so we keep customer if LiqPay fails
+    try {
+      const orderPayload = { ...order, createdAt: new Date().toISOString() };
+      await notifyOrderOwners(orderPayload);
+      await orderRef.update({ notificationsSent: true });
+    } catch (notifyError) {
+      console.error('ORDER NOTIFY ERROR:', notifyError);
     }
 
     return NextResponse.json({ orderNumber });

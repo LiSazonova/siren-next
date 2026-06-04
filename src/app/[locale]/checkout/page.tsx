@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCartItems, useCartSubtotal, useCart } from '@/stores/cart';
 import { createOrder } from '@/lib/orders/createOrder';
+import { reportPaymentFailed } from '@/lib/orders/reportPaymentFailed';
 import { useLocale, useTranslations } from 'next-intl';
 import useAuthUser from '@/hooks/useAuthUser';
 
@@ -166,7 +167,11 @@ export default function CheckoutPage() {
           amount={liqPayCheckout.amount}
           description={liqPayCheckout.description}
           autoSubmit
-          onError={() => {
+          onError={async () => {
+            await reportPaymentFailed(
+              liqPayCheckout.orderId,
+              'checkout_init_failed',
+            );
             setLiqPayCheckout(null);
             router.push(`/${locale}/checkout/error`);
           }}

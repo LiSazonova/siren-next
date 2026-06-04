@@ -1,7 +1,14 @@
 import { verifyLiqPaySignature } from '@/lib/liqpay';
 import { adminDb } from '@/lib/firebase/admin';
-import { sendOrderEmail } from '@/lib/email/sendOrderEmail';
-import { sendTelegramMessage } from '@/lib/telegram/sendTelegramMessage';
+import { notifyOrderOwners } from '@/lib/orders/notifyOrderOwners';
+
+const LIQPAY_FAILURE_STATUSES = new Set([
+  'failure',
+  'error',
+  'reversed',
+  'expired',
+  'tryagain',
+]);
 
 export async function POST(req: Request) {
   const formData = await req.formData();
@@ -24,30 +31,57 @@ export async function POST(req: Request) {
   const payload = JSON.parse(Buffer.from(data, 'base64').toString('utf8'));
   const { status, order_id: orderId } = payload;
 
-  if ((status === 'success' || status === 'sandbox') && orderId) {
-    const orderRef = adminDb.collection('orders').doc(String(orderId));
-    const orderSnap = await orderRef.get();
+  if (!orderId) {
+    return new Response('OK', { status: 200 });
+  }
 
+  const orderRef = adminDb.collection('orders').doc(String(orderId));
+  const orderSnap = await orderRef.get();
+  if (!orderSnap.exists) {
+    return new Response('OK', { status: 200 });
+  }
+
+  const orderData = orderSnap.data();
+
+  if (status === 'success' || status === 'sandbox') {
     await orderRef.update({
       paymentStatus: 'paid',
       status: 'processing',
     });
 
-    if (orderSnap.exists && !orderSnap.data()?.notificationsSent) {
-      const orderPayload = {
-        id: orderSnap.id,
-        ...orderSnap.data(),
-        paymentStatus: 'paid',
-        status: 'processing',
-        createdAt: new Date().toISOString(),
-      };
+    if (!orderData?.paidNotificationSent) {
       try {
-        await sendOrderEmail(orderPayload);
-        await sendTelegramMessage(orderPayload);
-        await orderRef.update({ notificationsSent: true });
+        await notifyOrderOwners({
+          id: orderSnap.id,
+          ...orderData,
+          paymentStatus: 'paid',
+          status: 'processing',
+          createdAt: new Date().toISOString(),
+        });
+        await orderRef.update({
+          paidNotificationSent: true,
+          notificationsSent: true,
+        });
       } catch (notifyError) {
         console.error('LIQPAY NOTIFY ERROR:', notifyError);
       }
+    }
+  } else if (LIQPAY_FAILURE_STATUSES.has(status) && !orderData?.paymentFailedNotified) {
+    await orderRef.update({
+      paymentStatus: 'failed',
+      paymentFailedNotified: true,
+    });
+
+    try {
+      await notifyOrderOwners({
+        id: orderSnap.id,
+        ...orderData,
+        paymentStatus: 'failed',
+        paymentNote: `liqpay:${status}`,
+        createdAt: new Date().toISOString(),
+      });
+    } catch (notifyError) {
+      console.error('LIQPAY FAILED NOTIFY ERROR:', notifyError);
     }
   }
 

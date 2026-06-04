@@ -21,6 +21,8 @@ export async function sendOrderEmail(order: any) {
     } = order;
 
     const safeOrderNumber = orderNumber || orderId || "—";
+    const isFailed = paymentStatus === "failed";
+    const isPaid = paymentStatus === "paid";
 
     console.log("📩 EMAIL DEBUG:");
     console.log("customer email:", customer?.email);
@@ -49,7 +51,9 @@ export async function sendOrderEmail(order: any) {
       SIREN
     </h1>
 
-    <h2>Нове замовлення</h2>
+    <h2>${isFailed ? "⚠️ Оплата не пройшла" : isPaid ? "Замовлення оплачено" : "Нове замовлення"}</h2>
+
+    ${isFailed ? '<p style="color:#f87171"><b>Зв’яжіться з клієнтом для повторної оплати.</b></p>' : ""}
 
     <p>Номер: <b>#${safeOrderNumber}</b></p>
 
@@ -98,11 +102,15 @@ export async function sendOrderEmail(order: any) {
     <h1 style="letter-spacing:4px;margin-bottom:30px">SIREN</h1>
 
     <h2 style="margin-bottom:20px">
-      Дякуємо за замовлення 💙
+      ${isFailed ? "Оплату не завершено" : "Дякуємо за замовлення 💙"}
     </h2>
 
     <p style="margin-bottom:10px">
-      Ваше замовлення <b>#${safeOrderNumber}</b> успішно оформлено
+      ${
+        isFailed
+          ? `Замовлення <b>#${safeOrderNumber}</b> оформлено, але оплата карткою не пройшла.`
+          : `Ваше замовлення <b>#${safeOrderNumber}</b> успішно оформлено`
+      }
     </p>
 
     <p style="margin-bottom:10px">
@@ -110,7 +118,11 @@ export async function sendOrderEmail(order: any) {
     </p>
 
     <p style="color:#aaa;margin-bottom:30px">
-      Ми вже обробляємо його та зв’яжемось з вами найближчим часом
+      ${
+        isFailed
+          ? "Ми зв’яжемось з вами, щоб допомогти завершити оплату."
+          : "Ми вже обробляємо його та зв’яжемось з вами найближчим часом"
+      }
     </p>
 
     <div style="font-size:18px;margin-bottom:30px">
@@ -131,10 +143,16 @@ export async function sendOrderEmail(order: any) {
 `;
 
     // 📩 отправка админу
+    const adminSubject = isFailed
+      ? `SIREN — Замовлення #${safeOrderNumber} — оплата не пройшла`
+      : isPaid
+        ? `SIREN — Замовлення #${safeOrderNumber} — оплачено`
+        : `SIREN — Order #${safeOrderNumber}`;
+
     const adminRes = await resend.emails.send({
       from: process.env.EMAIL_FROM!,
       to: [process.env.EMAIL_OWNER!],
-      subject: `SIREN — Order #${safeOrderNumber}`,
+      subject: adminSubject,
       html: adminHtml,
     });
 
@@ -145,7 +163,9 @@ export async function sendOrderEmail(order: any) {
       const customerRes = await resend.emails.send({
         from: process.env.EMAIL_FROM!,
         to: [customer.email],
-        subject: `Ваше замовлення #${safeOrderNumber} оформлено`,
+        subject: isFailed
+          ? `Замовлення #${safeOrderNumber} — оплату не завершено`
+          : `Ваше замовлення #${safeOrderNumber} оформлено`,
         html: customerHtml,
       });
 

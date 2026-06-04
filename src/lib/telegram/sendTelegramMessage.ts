@@ -21,9 +21,23 @@ export async function sendTelegramMessage(order: any, chatId?: string) {
     )
     .join("\n");
 
-  const text = `
-🛒 <b>Нове замовлення</b>
+  const title =
+    order.paymentStatus === 'failed'
+      ? '⚠️ <b>Замовлення — оплата не пройшла</b>'
+      : order.paymentStatus === 'pending' && order.paymentMethod === 'card'
+        ? '🛒 <b>Нове замовлення (очікує оплату карткою)</b>'
+        : order.paymentStatus === 'paid'
+          ? '✅ <b>Замовлення оплачено</b>'
+          : '🛒 <b>Нове замовлення</b>';
 
+  const contactHint =
+    order.paymentStatus === 'failed'
+      ? '\n📞 <i>Зв’яжіться з клієнтом для повторної оплати.</i>\n'
+      : '';
+
+  const text = `
+${title}
+${contactHint}
 Номер: <b>#${order.orderNumber}</b>
 
 ━━━━━━━━━━━━━━━
