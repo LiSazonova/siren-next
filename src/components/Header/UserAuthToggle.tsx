@@ -95,7 +95,7 @@ export default function UserAuthToggle() {
               )}
               <button
                 onClick={handleLogout}
-                className="w-full rounded-xl bg-black text-center text-sm font-semibold uppercase text-white hover:opacity-90"
+                className="w-full bg-black py-3 text-center text-[18px] uppercase text-white hover:opacity-90"
               >
                 {t('logout')}
               </button>
