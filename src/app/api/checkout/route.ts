@@ -26,10 +26,24 @@ export async function POST(req: Request) {
     );
   }
 
+  if (publicKey === 'i31219995456') {
+    return NextResponse.json(
+      {
+        error:
+          'Demo LiqPay keys are invalid. Use sandbox_* keys from your LiqPay merchant cabinet.',
+      },
+      { status: 400 },
+    );
+  }
+
+  if (Number(amount) <= 0) {
+    return NextResponse.json({ error: 'Invalid order amount' }, { status: 400 });
+  }
+
   const resolvedLocale = locale === 'ua' ? 'ua' : 'en';
   const orderIdStr = String(orderId);
-  const useSandbox =
-    process.env.LIQPAY_SANDBOX === '1' || publicKey.startsWith('sandbox_');
+  // sandbox: 1 only with real sandbox_* keys from LiqPay cabinet (not SDK demo keys)
+  const useSandbox = publicKey.startsWith('sandbox_');
 
   const { data, signature } = createLiqPayCheckout(
     {

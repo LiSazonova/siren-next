@@ -11,6 +11,7 @@ type CheckoutButtonProps = {
   description: string;
   /** When true, redirects to LiqPay immediately on mount (e.g. after order creation). */
   autoSubmit?: boolean;
+  onError?: () => void;
 };
 
 export default function CheckoutButton({
@@ -18,6 +19,7 @@ export default function CheckoutButton({
   amount,
   description,
   autoSubmit = false,
+  onError,
 }: CheckoutButtonProps) {
   const locale = useLocale();
   const submitted = useRef(false);
@@ -35,7 +37,10 @@ export default function CheckoutButton({
     });
 
     if (!res.ok) {
-      throw new Error('Failed to initialize payment');
+      const err = await res.json().catch(() => ({}));
+      throw new Error(
+        typeof err.error === 'string' ? err.error : 'Failed to initialize payment',
+      );
     }
 
     const { data, signature } = await res.json();
@@ -65,8 +70,9 @@ export default function CheckoutButton({
     redirectToLiqPay().catch((err) => {
       console.error(err);
       submitted.current = false;
+      onError?.();
     });
-  }, [autoSubmit, redirectToLiqPay]);
+  }, [autoSubmit, redirectToLiqPay, onError]);
 
   if (autoSubmit) {
     return null;

@@ -52,11 +52,15 @@ export async function POST(req: Request) {
 
     await adminDb.collection('orders').doc(String(orderNumber)).set(order);
 
-    try {
-      await sendOrderEmail({ ...order, createdAt: new Date().toISOString() });
-      await sendTelegramMessage({ ...order, createdAt: new Date().toISOString() });
-    } catch (notifyError) {
-      console.error('ORDER NOTIFY ERROR:', notifyError);
+    // Card: notify after LiqPay payment in /api/liqpay/callback
+    if (paymentMethod !== 'card') {
+      try {
+        const orderPayload = { ...order, createdAt: new Date().toISOString() };
+        await sendOrderEmail(orderPayload);
+        await sendTelegramMessage(orderPayload);
+      } catch (notifyError) {
+        console.error('ORDER NOTIFY ERROR:', notifyError);
+      }
     }
 
     return NextResponse.json({ orderNumber });

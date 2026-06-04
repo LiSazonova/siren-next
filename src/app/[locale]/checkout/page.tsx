@@ -134,6 +134,10 @@ export default function CheckoutPage() {
           amount={liqPayCheckout.amount}
           description={liqPayCheckout.description}
           autoSubmit
+          onError={() => {
+            setLiqPayCheckout(null);
+            router.push(`/${locale}/checkout/error`);
+          }}
         />
       )}
     </main>

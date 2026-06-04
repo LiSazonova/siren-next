@@ -1,22 +1,14 @@
+import {
+  getPaymentMethodLabel,
+  getPaymentStatusLabel,
+} from '@/lib/orders/paymentLabels';
+
 export async function sendTelegramMessage(order: any, chatId?: string) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
 
   const chatIds = chatId
     ? [chatId]
     : (process.env.TELEGRAM_CHAT_IDS || '').split(',');
-
-  function getPaymentLabel(method: string) {
-    switch (method) {
-      case "cod":
-        return "Післяплата";
-      case "paypal":
-        return "PayPal";
-      case "card":
-        return "Оплата карткою";
-      default:
-        return method;
-    }
-  }
 
   const itemsText = order.items
     ?.map(
@@ -52,7 +44,8 @@ ${order.customer?.phone}
 ━━━━━━━━━━━━━━━
 
 <b>Оплата</b>
-${getPaymentLabel(order.paymentMethod)}
+Спосіб: ${getPaymentMethodLabel(order.paymentMethod)}
+Статус: ${getPaymentStatusLabel(order.paymentStatus, order.paymentMethod)}
 
 ━━━━━━━━━━━━━━━
 

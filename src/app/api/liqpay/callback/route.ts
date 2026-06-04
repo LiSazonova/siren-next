@@ -1,5 +1,7 @@
 import { verifyLiqPaySignature } from '@/lib/liqpay';
 import { adminDb } from '@/lib/firebase/admin';
+import { sendOrderEmail } from '@/lib/email/sendOrderEmail';
+import { sendTelegramMessage } from '@/lib/telegram/sendTelegramMessage';
 
 export async function POST(req: Request) {
   const formData = await req.formData();
@@ -23,10 +25,30 @@ export async function POST(req: Request) {
   const { status, order_id: orderId } = payload;
 
   if ((status === 'success' || status === 'sandbox') && orderId) {
-    await adminDb.collection('orders').doc(String(orderId)).update({
+    const orderRef = adminDb.collection('orders').doc(String(orderId));
+    const orderSnap = await orderRef.get();
+
+    await orderRef.update({
       paymentStatus: 'paid',
       status: 'processing',
     });
+
+    if (orderSnap.exists && !orderSnap.data()?.notificationsSent) {
+      const orderPayload = {
+        id: orderSnap.id,
+        ...orderSnap.data(),
+        paymentStatus: 'paid',
+        status: 'processing',
+        createdAt: new Date().toISOString(),
+      };
+      try {
+        await sendOrderEmail(orderPayload);
+        await sendTelegramMessage(orderPayload);
+        await orderRef.update({ notificationsSent: true });
+      } catch (notifyError) {
+        console.error('LIQPAY NOTIFY ERROR:', notifyError);
+      }
+    }
   }
 
   return new Response('OK', { status: 200 });

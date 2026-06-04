@@ -1,19 +1,10 @@
 import { Resend } from "resend";
+import {
+  getPaymentMethodLabel,
+  getPaymentStatusLabel,
+} from "@/lib/orders/paymentLabels";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-function getPaymentLabel(method: string) {
-  switch (method) {
-    case "cod":
-      return "Післяплата";
-    case "paypal":
-      return "PayPal";
-    case "card":
-      return "Оплата карткою";
-    default:
-      return method;
-  }
-}
 
 export async function sendOrderEmail(order: any) {
   try {
@@ -26,6 +17,7 @@ export async function sendOrderEmail(order: any) {
       deliveryMethod,
       deliveryCountry,
       paymentMethod,
+      paymentStatus,
     } = order;
 
     const safeOrderNumber = orderNumber || orderId || "—";
@@ -73,7 +65,8 @@ export async function sendOrderEmail(order: any) {
     <p>Індекс: ${customer?.postalCode || "-"}</p>
 
     <h3 style="margin-top:30px">Оплата</h3>
-    <p>${getPaymentLabel(paymentMethod) || "-"}</p>
+    <p>Спосіб: ${getPaymentMethodLabel(paymentMethod)}</p>
+    <p>Статус: ${getPaymentStatusLabel(paymentStatus, paymentMethod)}</p>
 
     <h3 style="margin-top:30px">Товари</h3>
 
@@ -110,6 +103,10 @@ export async function sendOrderEmail(order: any) {
 
     <p style="margin-bottom:10px">
       Ваше замовлення <b>#${safeOrderNumber}</b> успішно оформлено
+    </p>
+
+    <p style="margin-bottom:10px">
+      Оплата: ${getPaymentStatusLabel(paymentStatus, paymentMethod)}
     </p>
 
     <p style="color:#aaa;margin-bottom:30px">

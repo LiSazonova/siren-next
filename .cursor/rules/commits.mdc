@@ -1,0 +1,8 @@
+---
+description: Commit messages after code changes
+alwaysApply: true
+---
+
+When you modify project code, end with a brief commit message (1 line, English or Ukrainian, same style as recent commits). Do not run `git commit` unless the user asks.
+
+Example: `Add payment status to order email and Telegram notifications`
